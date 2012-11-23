@@ -115,6 +115,13 @@
 		background: #ccc;
 		text-align: right;
 		padding-top: 10px;
+		transition:width 1s;
+		-moz-transition:width 1s;
+		-webkit-transition:width 1s; 
+	}
+	
+	#unidades:hover{
+		width:150px;
 	}
 	
 	.horizontal{
