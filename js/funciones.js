@@ -5,8 +5,6 @@
  - Al agregar una ficha a un area, agregar esta al array correspondiente.
  - Concatenar todos los elementos del array antes de enviarlos al diccionario.
  - Si hay respuesta, vaciar el arreglo y colocar la nueva ficha en mult.*/
- 
-	var arrayMult = [];
 
 	var cols = document.querySelectorAll('#columns .column');
 	
@@ -35,91 +33,7 @@
 					 'henry': 'weber/ampere'};
 					 
 	/*diccionario: Contiene todas (o casi todas) las posibles combinaciones de unidades que representen otra unidad.*/
-	var diccionario = {'metrometro': 'metro2',
-					   'metro2metro': 'metro3',
-					   'metrometro2': 'metro3',					   
-					   '/segundo': 'hertz',
-					   'metrokilogramo/segundosegundo': 'newton',
-					   'kilogramometro/segundosegundo': 'newton',
-					   'newtonmetro': 'joule',
-					   'metronewton': 'joule',
-					   'metrometrokilogramo/segundosegundo': 'joule',
-					   'metrokilogramometro/segundosegundo': 'joule',
-					   'kilogramometrometro/segundosegundo': 'joule',
-					   'kilogramometro2/segundosegundo': 'joule',
-					   'metro2kilogramo/segundosegundo': 'joule',					   
-					   'ampereweber': 'joule',
-					   'weberampere': 'joule',
-					   'joule/segundo': 'watt',
-					   'newtonmetro/segundo': 'watt',
-					   'metronewton/segundo': 'watt',
-					   'metrometrokilogramo/segundosegundosegundo': 'watt',
-					   'metrokilogramometro/segundosegundosegundo': 'watt',
-					   'kilogramometrometro/segundosegundosegundo': 'watt',
-					   'kilogramometro2/segundosegundosegundo': 'watt',
-					   'metro2kilogramo/segundosegundosegundo': 'watt',
-					   'segundoampere': 'coulomb',
-					   'amperesegundo': 'coulomb',
-					   'voltfarad': 'coulomb',
-					   'faradvolt': 'coulomb',
-					   'coulomb/segundo': 'ampere',
-					   'watt/ampere': 'volt',
-					   'joule/amperesegundo': 'volt',
-					   'ampereohm': 'volt',
-					   'ohmampere': 'volt',
-					   'coulomb/farad': 'volt',
-					   'metrometrokilogramo/segundosegundosegundoampere': 'volt',					   
-					   'metrometrokilogramo/segundosegundoamperesegundo': 'volt',
-					   'metrometrokilogramo/segundoamperesegundosegundo': 'volt',
-					   'metrometrokilogramo/amperesegundosegundosegundo': 'volt',					   
-					   'metrokilogramometro/segundosegundosegundoampere': 'volt',
-					   'metrokilogramometro/segundosegundoamperesegundo': 'volt',
-					   'metrokilogramometro/segundoamperesegundosegundo': 'volt',
-					   'metrokilogramometro/amperesegundosegundosegundo': 'volt',					   
-					   'kilogramometrometro/segundosegundosegundoampere': 'volt',
-					   'kilogramometrometro/segundosegundoamperesegundo': 'volt',
-					   'kilogramometrometro/segundoamperesegundosegundo': 'volt',
-					   'kilogramometrometro/amperesegundosegundosegundo': 'volt',					   
-					   'kilogramometro2/segundosegundosegundoampere': 'volt',
-					   'kilogramometro2/segundosegundoamperesegundo': 'volt',
-					   'kilogramometro2/segundoamperesegundosegundo': 'volt',
-					   'kilogramometro2/amperesegundosegundosegundo': 'volt',					   
-					   'metro2kilogramo/segundosegundosegundoampere': 'volt',
-					   'metro2kilogramo/segundosegundoamperesegundo': 'volt',
-					   'metro2kilogramo/segundoamperesegundosegundo': 'volt',
-					   'metro2kilogramo/amperesegundosegundosegundo': 'volt',
-					   'watt/ampereampere': 'ohm',
-					   'volt/ampere': 'ohm',
-					   'joule/ampereamperesegundo': 'ohm',
-					   'joule/amperesegundoampere': 'ohm',					   
-					   'joule/segundoampereampere': 'ohm',
-					   'volt/ampere': 'ohm',
-					   'coulomb/volt': 'farad',
-					   'amperesegundo/volt': 'farad',
-					   'segundoampere/volt': 'farad',
-					   'ampereamperesegundo/watt': 'farad',
-					   'amperesegundoampere/watt': 'farad',
-					   'segundoampereampere/watt': 'farad',
-					   'joule/amperesegundo': 'volt',
-					   'voltsegundo': 'weber',
-					   'segundovolt': 'weber',
-					   'ampereohmsegundo': 'weber',
-					   'ohmamperesegundo': 'weber',
-					   'amperesegundoohm': 'weber',
-					   'ohmsegundoampere': 'weber',
-					   'segundoampereohm': 'weber',
-					   'segundoohmampere': 'weber',					   
-					   'wattsegundo/ampere': 'weber',
-					   'joule/ampere': 'weber',
-					   'volt/ohm': 'ampere',
-					   'joule/weber': 'ampere',
-					   'watt/volt': 'ampere',
-					   'weber/metro2': 'tesla',					   
-					   'weber/metrometro': 'tesla',					   
-					   'weber/ampere': 'henry',
-					   'voltsegundo/ampere': 'henry',
-					   'segundovolt/ampere': 'henry'
-					   };
+	var diccionario = "";
 	
 	var dragSrcEl = null;
 	
@@ -157,8 +71,7 @@
 					   caso contrario, aparece un mensaje de información indicando que la unidad en cuestión, ya ha sido creada antes.*/
 	var centinelMensaje = false;
 	
-	function handleDragStart(e){
-		console.log(combMult);
+	function handleDragStart(e){	
 		this.style.opacity = '0.4';
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
@@ -296,10 +209,11 @@
 			}
 			centinel = 0;
 			if(diccionario[combMult]){
-				//combMult = diccionario[combMult];
-				//combMult = obtenerUnidad();				
+				combMult = diccionario[combMult];
+				//combMult = obtenerUnidad();								
+				//obtenerUnidad(combMult);
 				
-				obtenerUnidad(combMult);				
+				obtenerUnidades();
 				
 				this.innerHTML = "";
 				centinelMult = 0;
@@ -314,10 +228,11 @@
 			superComb = combMult + '/' + combDiv; //No hay problema si superComb no tiene validación, pues el centinel de la siguiente linea lo hace.
 			if(centinel == 0){				
 				if(diccionario[superComb]){
-					//combMult = diccionario[superComb];
-					//combMult = obtenerUnidad();
+					combMult = diccionario[superComb];
+					//combMult = obtenerUnidad();					
+					//obtenerUnidad(superComb);					
 					
-					obtenerUnidad(superComb);
+					obtenerUnidades();
 					
 					this.innerHTML = "";
 					centinelMult = 0;
@@ -558,6 +473,7 @@
 			centinelColumnas = 1;
 		else if(column == 'col2')
 			centinelColumnas = 0;
+		//modificarContador(unidadesExistentes.length);
 	}	
 	
 	/*
@@ -689,17 +605,17 @@
 		element.addEventListener('dragend', handleDragEnd, false);
 	}		
 		
-	function obtenerUnidad(combinacion){
+	function obtenerUnidades(){
 		$.ajax({
+			dataType: "json",
 			async:false,
-			//url: 'http://localhost:9090/unitslab/unidad.php',
-			url: 'http://192.168.1.108/?formula=' + combinacion,
-			crossDomain: true,
-			success: function(respuesta){
-				var $this = $(respuesta);
-				var nombre = $this.find('nombre').text();
-				combMult = nombre;
-			}			
+			url: './json/unidades_json.json',			
+			//url: './php/unidades_php.php',
+			type: "GET",
+			success: function(respuesta){				
+				diccionario = respuesta;
+				console.log(respuesta);
+			}
 		});
 	}
 	
