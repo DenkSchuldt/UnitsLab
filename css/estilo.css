@@ -5,53 +5,44 @@
 		-khtml-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
-	}		
-	  	
+	}			  	
 	  
 	#col1{
-		float: left;
+		float: left;		
 	}
 	
 	#col2{
 		float: right;
-		margin-right: 90px;
+		margin-right: 47%;
 	}
 	
 	#limpiar{
-		height: 30px;
+		height: 5px;
 		width: 50px;
 		position: fixed;
-		margin-top: 405px;
-		margin-left: 760px;
+		margin-top: 60%;
+		margin-left: 58%;
 	}	
 	
 	#reset{
 		height: 30px;
 		width: 50px;
 		position: fixed;
-		margin-top: 405px;
-		margin-left: 665px;
+		margin-top: 60%;
+		margin-left: 50.5%;
 	}	
-	
-	#info{
-		height: 30px;
-		width: 50px;
-		position: fixed;
-		margin-top: 405px;
-		margin-left: 300px;
-	}
 	
 	#area{
 		border: 2px solid #666666;
 		text-align: center;
 		color: white;
 		position: fixed;
-		margin-top: 30px;
-		margin-left: 210px;		
+		margin-top: 7%;
+		margin-left: 16.4%;		
 	}
 	
 	/*El siguiente bloque de código crea el efecto de degradado en el fondo de la página.*/
-	body {  
+	/*body {  
 		-moz-animation-duration: 3s;  
 		-moz-animation-name: bkchange; 
 		-moz-animation-iteration-count: infinite;  
@@ -60,14 +51,9 @@
 		-webkit-animation-name: bkchange; 
 		-webkit-animation-iteration-count: infinite;  
 		-webkit-animation-direction: alternate;
-	}
+	}*/  
   
-	body,html {      
-		width:100%;
-		height:100%;   
-	}  
-  
-	@-moz-keyframes bkchange{  
+	/*@-moz-keyframes bkchange{  
 		from{ background: #999;}  
 		to{ background:white;}  
 	} 
@@ -75,7 +61,7 @@
 	@-webkit-keyframes bkchange{  
 		from{ background: #333;}  
 		to{ background:white;}  
-	} 
+	} */
 	/*Hasta aquí.*/
 	
 	#mult{
@@ -83,7 +69,7 @@
 		width: 500px;
 		text-align: center;
 		background: red;
-		background-image: url(../img/mult.jpg);
+		/*background-image: url(../img/mult.jpg);*/
 	}		
 	
 	#division{
@@ -91,7 +77,7 @@
 		width: 500px;
 		text-align: center;
 		background: blue;
-		background-image: url(../img/div.jpg);
+		/*background-image: url(../img/div.jpg);*/
 	}		
 	
 	#ubicacion{
@@ -101,12 +87,8 @@
 	}	
 	
 	#columns{		
-		width: 193px;	
+		width: 100%;		
 	}	
-
-	#mensaje{
-		height: 50px;
-	}
 	
 	#unidades{
 		width: 100px;

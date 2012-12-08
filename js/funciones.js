@@ -1,4 +1,13 @@
 
+/*Modificaciones:
+ - Crear un arreglo para las unidades en el area de multiplicacion, y otro para el area
+   de división.
+ - Al agregar una ficha a un area, agregar esta al array correspondiente.
+ - Concatenar todos los elementos del array antes de enviarlos al diccionario.
+ - Si hay respuesta, vaciar el arreglo y colocar la nueva ficha en mult.*/
+ 
+	var arrayMult = [];
+
 	var cols = document.querySelectorAll('#columns .column');
 	
 	//mult: Area de multiplicación de las unidades
@@ -109,7 +118,7 @@
 					   'weber/metrometro': 'tesla',					   
 					   'weber/ampere': 'henry',
 					   'voltsegundo/ampere': 'henry',
-					   'segundovolt/ampere': 'henry',
+					   'segundovolt/ampere': 'henry'
 					   };
 	
 	var dragSrcEl = null;
@@ -148,7 +157,8 @@
 					   caso contrario, aparece un mensaje de información indicando que la unidad en cuestión, ya ha sido creada antes.*/
 	var centinelMensaje = false;
 	
-	function handleDragStart(e){		
+	function handleDragStart(e){
+		console.log(combMult);
 		this.style.opacity = '0.4';
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
@@ -281,12 +291,16 @@
 			}
 			if(centinel == 0){
 				if(centinelMult < 5)
-					combMult = combMult + element.text(); //modo interno
-				addElementOnArea(element.text(),'mult'); //modo grafico (con validación de colocar unidad incluida)
+					combMult = combMult + element.text(); //modo interno				
+				addElementOnArea(element.text(),'mult'); //modo grafico (con validación de colocar unidad incluida)							
 			}
 			centinel = 0;
 			if(diccionario[combMult]){
-				combMult = diccionario[combMult];				
+				//combMult = diccionario[combMult];
+				//combMult = obtenerUnidad();				
+				
+				obtenerUnidad(combMult);				
+				
 				this.innerHTML = "";
 				centinelMult = 0;
 				if(centinelColumnas == 0)
@@ -300,7 +314,11 @@
 			superComb = combMult + '/' + combDiv; //No hay problema si superComb no tiene validación, pues el centinel de la siguiente linea lo hace.
 			if(centinel == 0){				
 				if(diccionario[superComb]){
-					combMult = diccionario[superComb];					
+					//combMult = diccionario[superComb];
+					//combMult = obtenerUnidad();
+					
+					obtenerUnidad(superComb);
+					
 					this.innerHTML = "";
 					centinelMult = 0;
 					document.getElementById('division').innerHTML = "";
@@ -670,6 +688,20 @@
 		element.addEventListener('drop', handleDrop, false);
 		element.addEventListener('dragend', handleDragEnd, false);
 	}		
+		
+	function obtenerUnidad(combinacion){
+		$.ajax({
+			async:false,
+			//url: 'http://localhost:9090/unitslab/unidad.php',
+			url: 'http://192.168.1.108/?formula=' + combinacion,
+			crossDomain: true,
+			success: function(respuesta){
+				var $this = $(respuesta);
+				var nombre = $this.find('nombre').text();
+				combMult = nombre;
+			}			
+		});
+	}
 	
 	[].forEach.call(cols, function(col){
 		setDragAndDropProp(col);

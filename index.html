@@ -3,7 +3,7 @@
 	<head>
 		<meta charset=utf-8>
 		<meta name="viewport" content="width=620">
-		<title>Titulo</title>
+		<title>UnitsLab: Physics</title>
 		<link rel="stylesheet" href="css/estilo.css">
 		<link rel="stylesheet" href="css/bootstrap.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -11,60 +11,59 @@
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">		
 	</head>
 	<body>		
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="header">
-						<br>
-						<h1>UnitsLab:<small>  Physics</small></h1>						
-						<br>
-					</div>					
-					<div id="mensaje">
-						<div class="well well-small">							
-							<b>Combina</b> las unidades para crear muchas mas!
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="header">
+					<br>
+					<h1>UnitsLab:<small>  Physics</small></h1>						
+					<br>
+				</div>					
+				<div>
+					<div class="well well-small">							
+						<b>Combina</b> las unidades para crear muchas mas!
+					</div>
+				</div>
+				<div class="row-fluid">
+					<div class="span1">
+						<div id="unidades" style="font-size:150%">
+						4/17<font color="#ccc">..</font>
+						</div>							
+					</div>
+					<div class="span9">
+						<div id="areas">
+							<div id="area">
+								<div id="mult"></div>
+								<div id="division"></div>
+							</div>
 						</div>
 					</div>
-					<div class="row-fluid">
-						<div class="span1">
-							<div id="unidades" style="font-size:150%">
-							4/17<font color="#ccc">..</font>
-							</div>							
-						</div>
-						<div class="span9">
-							<div id="areas">
-								<div id="area">
-									<div id="mult"></div>
-									<div id="division"></div>
-								</div>
+					<div class="span2">						
+					<div style="height: 450px; overflow-x:hidden;">
+						<div id="columns">
+							<div class="span1" id="col1">
+								<div class="horizontal"></div>
+								<div class="column" draggable="true"><footer>metro</footer></div>
+								<div class="horizontal"></div>
+								<div class="column" draggable="true"><footer>kilogramo</footer></div>
+							</div>
+							<div class="span1" id="col2">
+								<div class="horizontal"></div>
+								<div class="column" draggable="true"><footer>segundo</footer></div>
+								<div class="horizontal"></div>
+								<div class="column" draggable="true"><footer>ampere</footer></div>
 							</div>
 						</div>
-						<div class="span2">						
-						<div style="height: 450px; overflow-x:hidden;">
-							<div id="columns">
-								<div class="span1" id="col1">
-									<div class="horizontal"></div>
-									<div class="column" draggable="true"><footer>metro</footer></div>
-									<div class="horizontal"></div>
-									<div class="column" draggable="true"><footer>kilogramo</footer></div>
-								</div>
-								<div class="span1" id="col2">
-									<div class="horizontal"></div>
-									<div class="column" draggable="true"><footer>segundo</footer></div>
-									<div class="horizontal"></div>
-									<div class="column" draggable="true"><footer>ampere</footer></div>
-								</div>
-							</div>
-							</div>
-						</div>						
-						<div id="limpiar">				
-							<a class="btn" href="#" onClick="limpiarPizarra()" title="Limpiar el area"><i class="icon-trash icon-black"></i>Vaciar</a>
 						</div>
-						<div id="reset">
-							<a class="btn" href="#" onClick="reset()" title="Reiniciar todo"><i class="icon-refresh icon-black"></i>Reinicio</a>
-						</div>											
-					</div>					
-				</div>				
-			</div>
-		
+					</div>						
+					<div id="limpiar">				
+						<a class="btn" href="#" onClick="limpiarPizarra()" title="Limpiar el area"><i class="icon-trash icon-black"></i>Vaciar</a>
+					</div>
+					<div id="reset">
+						<a class="btn" href="#" onClick="reset()" title="Reiniciar todo"><i class="icon-refresh icon-black"></i>Reinicio</a>
+					</div>											
+				</div>					
+			</div>				
+		</div>	
 	</body>
 </html>
 
