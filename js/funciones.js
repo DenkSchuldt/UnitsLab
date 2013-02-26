@@ -4,8 +4,8 @@
    de división.
  - Al agregar una ficha a un area, agregar esta al array correspondiente.
  - Concatenar todos los elementos del array antes de enviarlos al diccionario.
- - Si hay respuesta, vaciar el arreglo y colocar la nueva ficha en mult.*/
-
+ - Si hay respuesta, vaciar el arreglo y colocar la nueva ficha en mult.*/ 
+	
 	var cols = document.querySelectorAll('#columns .column');
 	
 	//mult: Area de multiplicación de las unidades
@@ -34,6 +34,9 @@
 					 
 	/*diccionario: Contiene todas (o casi todas) las posibles combinaciones de unidades que representen otra unidad.*/
 	var diccionario = "";
+	
+	var unidadesRestantes = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'];
+	var unidadesRestantesStatic = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'];
 	
 	var dragSrcEl = null;
 	
@@ -70,6 +73,28 @@
 	/*centinelMensaje: Si toma el valor de 'true', aparecerá un mensaje de éxito indicandole al jugador que una nueva unidad ha sido creada,
 					   caso contrario, aparece un mensaje de información indicando que la unidad en cuestión, ya ha sido creada antes.*/
 	var centinelMensaje = false;
+	
+	function modificarUnidadesRestantes(elemento){		
+		document.getElementById('seccionDos').innerHTML = "<h4>Unidades restantes:</h4>";
+		for(var i in unidadesRestantes){
+			if(unidadesRestantes[i] == elemento){
+				var pos = unidadesRestantes.indexOf(elemento);
+				delete unidadesRestantes[pos];				
+			}else if( unidadesRestantes[i] != undefined){
+				document.getElementById('seccionDos').innerHTML += '<p>' + unidadesRestantes[i] + '</p>';
+			}
+		}
+	}
+	
+	function ubicarUnidadesRestantes(){
+		unidadesRestantes.length = 0;
+		unidadesRestantes = unidadesRestantesStatic.slice();
+		document.getElementById('seccionDos').innerHTML = "<h4>Unidades restantes:</h4>";
+		for(var i in unidadesRestantes){			
+			document.getElementById('seccionDos').innerHTML += '<p>' + unidadesRestantes[i] + '</p>';			
+		}
+		
+	}
 	
 	function handleDragStart(e){	
 		this.style.opacity = '0.4';
@@ -249,8 +274,10 @@
 			}
 			if(activarTooltip){
 				document.getElementById('mult').setAttribute('title',toolTiped[combMult]); //se agrega el tooltip a la unidad creada en el area de mult.
-				if(centinelMensaje)
+				if(centinelMensaje){
 					mensaje(combMult); //se agrega el mensaje de éxito.
+					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
+				}
 				else
 					mensaje("repeat");  //se agrega el mensaje de información
 				modificarContador(unidadesExistentes.length);
@@ -416,8 +443,10 @@
 					document.getElementById('mult').setAttribute('title',toolTiped[combMult]);								
 				else if(combDiv != "")
 					document.getElementById('division').setAttribute('title',toolTiped[combMult]);
-				if(centinelMensaje)
+				if(centinelMensaje){
 					mensaje(combMult); //se agrega el mensaje de éxito.
+					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
+				}
 				else
 					mensaje("repeat"); //se agrega el mensaje de información.
 				modificarContador(unidadesExistentes.length);
@@ -550,6 +579,7 @@
 		}
 		modificarContador(unidadesExistentes.length);
 		mensaje("default");
+		ubicarUnidadesRestantes();
     }	
 	
 	/*
@@ -592,7 +622,7 @@
 	 * Actualiza el contador de los elementos que han sido creados, el mismo que se encuentra en la parte superior izquierda de la app, y cuyo límite es 17.
 	 */
 	function modificarContador(contadorDeUnidades){		
-		var documento = document.getElementById('unidades');
+		var documento = document.getElementById('contadorUnidades');
 		documento.innerHTML = contadorDeUnidades + "/17" + '<font color="#ccc">..</font>';
 	}
 	
@@ -609,7 +639,7 @@
 		$.ajax({
 			dataType: "json",
 			async:false,
-			url: './json/unidades_json.json',			
+			url: 'json/unidades_json.json',			
 			//url: './php/unidades_php.php',
 			type: "GET",
 			success: function(respuesta){				
