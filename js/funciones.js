@@ -31,6 +31,25 @@
 					 'weber': 'volt*segundo',
 					 'tesla': 'weber/metro^2',
 					 'henry': 'weber/ampere'};
+					
+	/*simbolos: Diccionario en el cual se buscará el símbolo de una determinada unidad.*/
+	var simbolos = {'metro': 'm',
+					'segundo': 's',
+					'kilogramo': 'kg',
+					'ampere': 'A',
+					'metro2': 'm<sup>2</sup>',
+					'metro3': 'm<sup>3</sup>',
+					'hertz': 'Hz',
+					'newton': 'N',
+					'joule': 'J',
+					'watt': 'W',
+					'coulomb': 'C',
+					'volt': 'V',
+					'ohm': 'w',
+					'farad': 'F',
+					'weber': 'Wb',
+					'tesla': 'T',
+					'henry': 'H'};
 					 
 	/*diccionario: Contiene todas (o casi todas) las posibles combinaciones de unidades que representen otra unidad.*/
 	var diccionario = "";
@@ -144,7 +163,7 @@
 			e.stopPropagation();
 		}
 		if (dragSrcEl != this){
-			var element = $(e.dataTransfer.getData('text/html'));				
+			var element = $(e.dataTransfer.getData('text/html')).next();
 			/*Este bloque solo se ejecuta si la unidad arrastrada es uno de los 3 metros. Evalua si la
 			  unidad en cuestión debe ser simplificada con una unidad en el area de división.*/
 			//-----------------------------------------------------------
@@ -308,7 +327,7 @@
 			e.stopPropagation();
 		}
 		if(dragSrcEl != this){ // contenedor en este método
-			var element = $(e.dataTransfer.getData('text/html'));
+			var element = $(e.dataTransfer.getData('text/html')).next();
 			/*Este bloque solo se ejecuta si la unidad arrastrada es uno de los 3 metros. Evalua si la
 			  unidad en cuestión debe ser simplificada con una unidad en el area de multiplicación.*/
 			//-----------------------------------------------------------
@@ -488,10 +507,17 @@
 		var columna = document.getElementById(column);
 		var unidad = document.createElement("div");
 		var espacio = document.createElement("div");
+		var label = document.createElement("label");		
 		var footer = document.createElement("footer");
 		unidad.setAttribute('class','column');
-		unidad.setAttribute('draggable','true');
+		unidad.setAttribute('draggable','true');		
 		footer.innerHTML = texto;
+		if(texto == 'ohm'){
+			label.setAttribute('style','font-family:Symbol');
+			label.innerHTML = 'w';
+		}else
+			label.innerHTML = simbolos[texto];
+		unidad.appendChild(label);		
 		unidad.appendChild(footer);
 		setDragAndDropProp(unidad);
 		espacio.setAttribute('class','horizontal');
@@ -520,10 +546,17 @@
 		var sector = document.getElementById(area);
 		var unidad = document.createElement("div");
 		var footer = document.createElement("footer");
+		var label = document.createElement("label");
 		unidad.setAttribute('class','column ' + texto);
 		unidad.setAttribute('id','ubicacion');
 		footer.innerHTML = texto;
-		unidad.appendChild(footer);
+		if(texto == 'ohm'){
+			label.setAttribute('style','font-family:Symbol');
+			label.innerHTML = 'w';
+		}else
+			label.innerHTML = simbolos[texto];
+		unidad.appendChild(label);
+		unidad.appendChild(footer);		
 		sector.appendChild(unidad);
 		if(area == 'mult')
 			centinelMult++;

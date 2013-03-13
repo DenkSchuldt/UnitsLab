@@ -113,7 +113,7 @@ body{
 	#btnReinicio{
 		position: absolute;
 		margin-top: 70%;
-		margin-left: 51%;
+		margin-left: 57%;
 	}
 
 /* :: Columna de las Unidades
@@ -134,12 +134,12 @@ body{
 	  
 	#col1{
 		float: left;
-		margin-left: 10%;
+		margin-left: 8%;
 	}
 
 	#col2{
 		float: right;
-		margin-right: 20%;
+		margin-right: 19%;
 	}
 			
 	[draggable]{
@@ -169,6 +169,7 @@ body{
 		float: center;
 		border: 1px solid #666666;
 		background-color: white;
+		color: black;
 		margin-right: 5px;
 		-webkit-border-radius: 10px;
 		-ms-border-radius: 10px;
@@ -177,17 +178,25 @@ body{
 		-webkit-box-shadow: inset 0 0 3px #000;
 		-ms-box-shadow: inset 0 0 3px #000;
 		box-shadow: inset 0 0 3px #000;
-		text-align: center;
+		text-align: center;		
 		cursor: move;
 	}
 
+	.column label{
+		position: relative;
+		text-shadow: #000 0 1px;
+		margin-top: 17px;
+		font-size: 200%;
+		cursor: move;
+	}
+	
 	.column footer{
 		color: #fff;
 		text-shadow: #000 0 1px;
 		box-shadow: 5px;
 		padding: 1px;
 		position: relative;
-		top: 55px;
+		top: 11px;
 		background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
 		background: -webkit-gradient(linear, left bottom, right bottom,
 									color-stop(0, rgb(0,0,0)),
