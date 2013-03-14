@@ -12,16 +12,14 @@
 		<link rel="stylesheet" href="./css/bootstrap-responsive.min.css">	
 	</head>
 	<body onload="obtenerUnidades()">				
-		<div class="header">
-			<br>
-			<h1>UnitsLab:<small>  Physics</small></h1>						
-			<br>
-		</div>		
-		<div id="mensaje">
-			<div class="well well-small">              
-				<b>Combina</b> las unidades para crear muchas mas! 	 
+		<div id="cabecera">			
+			<h1>UnitsLab:<small>  Physics</small></h1>									
+			<div id="mensaje">
+				<div class="well well-small">              
+					<b>Combina</b> las unidades para crear muchas mas! 	 
+				</div>
 			</div>
-		</div>
+		</div>				
 		<div id="secciones">
 			<div id="seccionUno">
 				<div id="contadorUnidades" style="font-size:150%">
@@ -44,15 +42,13 @@
 				<p>tesla</p>
 				<p>henry</p>
 			</div>
-			<div id="seccionTres">
-				<div id="areas">
-					<div id="area">
-						<div id="mult"></div>
-						<div id="division"></div>
-					</div>
-				</div>
-				<button class="btn" id="btnVaciar" onClick="limpiarPizarra()" title="Limpiar el area"><i class="icon-trash icon-black"></i>&nbsp;&nbsp;Vaciar</button>
-				<button class="btn" id="btnReinicio" onClick="reset()" title="Reiniciar todo"><i class="icon-refresh icon-black"></i>&nbsp;&nbsp;Reinicio</button>
+			<div id="seccionTres">				
+				<div id="area">
+					<div id="mult"></div>
+					<div id="division"></div>
+				</div>				
+				<button id="btnVaciar" onClick="limpiarPizarra()" title="Limpiar el area"><i class="icon-trash icon-black"></i>&nbsp;&nbsp;Vaciar</button>
+				<button id="btnReinicio" onClick="reset()" title="Reiniciar todo"><i class="icon-refresh icon-black"></i>&nbsp;&nbsp;Reinicio</button>
 			</div>
 			<div id="seccionCuatro">
 				<div style="height: 100%; overflow-x:hidden;">

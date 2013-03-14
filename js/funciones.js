@@ -18,19 +18,19 @@
 	var unidadesExistentes = ['metro','kilogramo','segundo','ampere']; 
 																	   
     /*toolTiped: Sirve para extraer la información que será mostrada en el tooltip de cada nueva unidad creada.*/	
-	var toolTiped = {'metro2': 'metro*metro',
-					 'metro3': 'metro^2*metro',
-					 'hertz': '1/segundo',
-					 'newton': '(metro*kilogramo)/segundo^2',
-					 'joule': 'newton*metro',
-					 'watt': 'joule/segundo',					 					 
-					 'coulomb': 'ampere*segundo',
-					 'volt': 'watt/ampere',
-					 'ohm': 'volt/ampere',
-					 'farad': 'coulomb/volt',
-					 'weber': 'volt*segundo',
-					 'tesla': 'weber/metro^2',
-					 'henry': 'weber/ampere'};
+	var toolTiped = {'metro2': 'm*m',
+					 'metro3': 'm^2*m',
+					 'hertz': '1/s',
+					 'newton': '(m*kg)/s^2',
+					 'joule': 'N*m',
+					 'watt': 'J/s',
+					 'coulomb': 'A*s',
+					 'volt': 'W/A',
+					 'ohm': 'V/A',
+					 'farad': 'C/V',
+					 'weber': 'V*s',
+					 'tesla': 'Wb/m^2',
+					 'henry': 'Wb/A'};
 					
 	/*simbolos: Diccionario en el cual se buscará el símbolo de una determinada unidad.*/
 	var simbolos = {'metro': 'm',
