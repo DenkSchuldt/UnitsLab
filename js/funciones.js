@@ -253,9 +253,7 @@
 			}
 			centinel = 0;
 			if(diccionario[combMult]){
-				combMult = diccionario[combMult];
-				//combMult = obtenerUnidad();								
-				//obtenerUnidad(combMult);
+				combMult = diccionario[combMult];				
 				
 				obtenerUnidades();
 				
@@ -273,9 +271,7 @@
 			if(centinel == 0){				
 				if(diccionario[superComb]){
 					combMult = diccionario[superComb];
-					//combMult = obtenerUnidad();					
-					//obtenerUnidad(superComb);					
-					
+													
 					obtenerUnidades();
 					
 					this.innerHTML = "";
@@ -634,18 +630,18 @@
 	function mensaje(unidad){
 		var ruta = document.getElementById("mensaje");
 		removeMensaje();
-		var div = document.createElement("div");
+		var p = document.createElement("p");
 		if(unidad == 'default'){
-			div.setAttribute('class','well well-small');
-			div.innerHTML = '<b>Combina</b> las unidades para crear muchas mas!';
+			p.setAttribute('style','color:gray;margin-left:2%;');
+			p.innerHTML = '<b>Combina</b> las unidades para crear muchas mas!';
 		}else if(unidad == 'repeat'){
-			div.setAttribute('class','alert alert-info');
-			div.innerHTML = '<b>Vaya!</b> Ya has creado esa unidad...';
+			p.setAttribute('style','color:#3E8EBB;margin-left:2%;');
+			p.innerHTML = '<b>Vaya!</b> Ya has creado esa unidad...';
 		}else{			
-			div.setAttribute('class','alert alert-success');
-			div.innerHTML = '<b>Enhorabuena!</b> Has creado una nueva unidad: <b>' + unidad + '</b>';
+			p.setAttribute('style','color:darkgreen;margin-left:2%;');
+			p.innerHTML = '<b>Enhorabuena!</b> Has creado una nueva unidad: <b>' + unidad + '</b>';
 		}
-		ruta.appendChild(div);
+		ruta.appendChild(p);
 	}		
 	
 	/*
@@ -656,7 +652,7 @@
 	 */
 	function modificarContador(contadorDeUnidades){		
 		var documento = document.getElementById('contadorUnidades');
-		documento.innerHTML = contadorDeUnidades + "/17" + '<font color="#ccc">..</font>';
+		documento.innerHTML = contadorDeUnidades + "/17";
 	}
 	
 	function setDragAndDropProp(element){

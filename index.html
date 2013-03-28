@@ -13,18 +13,16 @@
 	</head>
 	<body onload="obtenerUnidades()">				
 		<div id="cabecera">			
-			<h1>UnitsLab:<small>  Physics</small></h1>									
+			<h1>UnitsLab<label>Physics</label></h1>
 			<div id="mensaje">
-				<div class="well well-small">              
+				<div style="color:gray;margin-left:2%;">
 					<b>Combina</b> las unidades para crear muchas mas! 	 
 				</div>
 			</div>
 		</div>				
 		<div id="secciones">
 			<div id="seccionUno">
-				<div id="contadorUnidades" style="font-size:150%">
-					4/17<font color="#ccc">..</font>
-				</div>
+				<div id="contadorUnidades" style="font-size:150%">4/17</div>
 			</div>
 			<div id="seccionDos">
 				<h4>Unidades restantes:</h4>
@@ -50,6 +48,10 @@
 				<button id="btnVaciar" onClick="limpiarPizarra()" title="Limpiar el area"><i class="icon-trash icon-black"></i>&nbsp;&nbsp;Vaciar</button>
 				<button id="btnReinicio" onClick="reset()" title="Reiniciar todo"><i class="icon-refresh icon-black"></i>&nbsp;&nbsp;Reinicio</button>
 			</div>
+			<div id="vB"></div>			
+			<a href="https://www.facebook.com/tawsespol" target="_blank"><div id="facebook"></div></a>
+			<a href="https://twitter.com/taws_espol" target="_blank"><div id="twitter"></div></a>
+			<a href="https://github.com/taws" target="_blank"><div id="github"></div></a>
 			<div id="seccionCuatro">
 				<div style="height: 100%; overflow-x:hidden;">
 					<div id="columns">
