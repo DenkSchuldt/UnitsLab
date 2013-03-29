@@ -120,7 +120,7 @@
 		padding: 5px 10px;
 		float: right;
 		position: relative;
-		margin-top: 62%;
+		top: 82%;
 	}			
 	#seccionTres #btnVaciar{margin-right: 18%;}
 	#seccionTres button:hover{background-color:gray;}
@@ -135,6 +135,7 @@
 		width: 20%;		
 		left: 80%;
 		background-color: gray;
+		overflow-x:hidden;
 	}			  	
 
 	#vB{
@@ -146,20 +147,15 @@
 		background-color: gray;
 	}
 	
-	#columns{
-		width: 100%;		
-	}
-	  
-	#col1{
-		float: left;
-		margin-left: 8%;
-	}
-
-	#col2{
-		float: right;
-		margin-right: 19%;
-	}
-		
+	#columns{}	  
+	#col1, #col2{
+		width: 50%;
+		height: 100%;		
+		position: absolute;
+		padding-left: 10%;
+	}	
+	#col1{left:0; z-index: 4;}
+	#col2{right:0;}
 
 	/* :: Social
 	--------------------------------------------------------------------
@@ -226,20 +222,6 @@
 		user-select: none;
 	}
 
-	.horizontal{
-		height: 15px;
-		width: 75px;
-		float: center;		
-		opacity: 1;
-	}
-
-	.spaces{
-		height: 150px;
-		width: 500px;
-		float: center;
-		background-color: #fff;
-	}	
-
 	.column{
 		height: 75px;
 		width: 75px;
@@ -252,6 +234,7 @@
 		box-shadow: inset 0 0 3px #000;
 		text-align: center;		
 		cursor: move;
+		margin-top: 12%;
 	}
 
 	.column label{
@@ -282,64 +265,12 @@
 		border: 2px dashed #000;
 	}
 	
-	div.tooltip {
-		position:relative;    
-		color:#cf2c2c;
-		text-decoration:none;
-	}
-	div.tooltip span {
-		padding:5px 10px;
-		background:#555;
-		border:1px solid #555;
-		min-width:140px;
-		position:absolute;
-		top:5px;
-		left:5px;
-		color:#FFF;
-		text-align:center;
-		opacity:0;
-		-moz-transition: opacity 1s ease,top 1s ease;
-		-webkit-transition: opacity 1s ease,top 1s ease;
-		-o-transition:opacity 1s ease,top 1s ease;
-		transition: opacity 1s ease,top 1s ease;
-		font-family:Georgia, "Times New Roman", Times, serif;
-		font-size:13px;
-		font-weight:bold;
-	}
-
-	div.tooltip span:before {
-		width: 0;
-		height: 0;
-		border-left: 7px solid transparent;
-		border-right: 7px solid transparent;
-		border-bottom: 7px solid #555;
-		z-index:5;
-		content: " ";
-		position:absolute;
-		top:-7px;
-		left:11%;
-	}
-
-	div.tooltip span:after {
-		width: 0;
-		height: 0;
-		border-left: 7px solid transparent;
-		border-right: 7px solid transparent;
-		border-bottom: 7px solid #555;
-		display:block;
-		content: " ";
-		position:absolute;
-		top:-8px;
-		left:11%;
-	}
-	
-	div.tooltip:hover span {
-		opacity:1;
-		top:25px;
-	}
-	
-	#ubicacion{
+	/*De la ficha en la pizarra*/
+	#ubicacion{		
+		top: auto;
+		bottom: auto;
+		left: auto;
+		right: auto;
 		float: left;
-		margin-left: 16px;
-		margin-top: 49px;
+		margin-left: 4%;
 	}	

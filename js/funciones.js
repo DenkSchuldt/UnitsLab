@@ -502,7 +502,6 @@
 		centinelMensaje = true;
 		var columna = document.getElementById(column);
 		var unidad = document.createElement("div");
-		var espacio = document.createElement("div");
 		var label = document.createElement("label");		
 		var footer = document.createElement("footer");
 		unidad.setAttribute('class','column');
@@ -516,9 +515,7 @@
 		unidad.appendChild(label);		
 		unidad.appendChild(footer);
 		setDragAndDropProp(unidad);
-		espacio.setAttribute('class','horizontal');
 		unidadesExistentes[unidadesExistentes.length] = texto;
-		columna.appendChild(espacio);
 		columna.appendChild(unidad);
 		if(column == 'col1')
 			centinelColumnas = 1;
@@ -595,12 +592,9 @@
 		centinelColumnas = 0;				
 		if(unidadesExistentes.length != 4){
 			$('.column').remove();
-			$('.horizontal').remove();
 			unidadesExistentes = [];
 			var col1 = document.getElementById("col1");
-			var col2 = document.getElementById("col2");
-			var espacio = document.createElement("div");
-			espacio.setAttribute('class','horizontal');
+			var col2 = document.getElementById("col2");			
 			addElementInColumn('metro',"col1");
 			addElementInColumn('kilogramo',"col1");
 			addElementInColumn('segundo',"col2");			
