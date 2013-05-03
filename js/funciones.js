@@ -93,16 +93,17 @@
 					   caso contrario, aparece un mensaje de información indicando que la unidad en cuestión, ya ha sido creada antes.*/
 	var centinelMensaje = false;
 	
-	function modificarUnidadesRestantes(elemento){		
-		document.getElementById('seccionDos').innerHTML = "<h4>Unidades restantes:</h4>";
-		for(var i in unidadesRestantes){
-			if(unidadesRestantes[i] == elemento){
-				var pos = unidadesRestantes.indexOf(elemento);
-				delete unidadesRestantes[pos];				
-			}else if( unidadesRestantes[i] != undefined){
-				document.getElementById('seccionDos').innerHTML += '<p>' + unidadesRestantes[i] + '</p>';
-			}
-		}
+	function modificarUnidadesRestantes(elemento){				 
+		var tmp = "";		
+		if(elemento == "metro2") tmp = "#m2";
+		else if(elemento == "metro3") tmp = "#m3";
+		else tmp = "#"+simbolos[elemento];
+		$(tmp).jrumble({x: 8,y: 8,rotation: 4});
+		$(tmp).trigger('startRumble');
+		setTimeout(function(){
+			$(tmp).trigger('stopRumble');
+			$(tmp).fadeOut('slow');
+		},500);
 	}
 	
 	function ubicarUnidadesRestantes(){
@@ -110,13 +111,18 @@
 		unidadesRestantes = unidadesRestantesStatic.slice();
 		document.getElementById('seccionDos').innerHTML = "<h4>Unidades restantes:</h4>";
 		for(var i in unidadesRestantes){			
-			document.getElementById('seccionDos').innerHTML += '<p>' + unidadesRestantes[i] + '</p>';			
+			if(unidadesRestantes[i] == "metro2") 
+				document.getElementById('seccionDos').innerHTML += '<p id="m2">' + unidadesRestantes[i] + '</p>';
+			else if(unidadesRestantes[i] == "metro3") 
+				document.getElementById('seccionDos').innerHTML += '<p id="m3">' + unidadesRestantes[i] + '</p>';
+			else
+				document.getElementById('seccionDos').innerHTML += '<p id=' + simbolos[unidadesRestantes[i]] + '>' + unidadesRestantes[i] + '</p>';
 		}
 		
 	}
 	
 	function handleDragStart(e){	
-		this.style.opacity = '0.4';
+		this.style.opacity = '0.9';
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
 		e.dataTransfer.setData('text/html', this.innerHTML);
@@ -504,7 +510,7 @@
 		var unidad = document.createElement("div");
 		var label = document.createElement("label");		
 		var footer = document.createElement("footer");
-		unidad.setAttribute('class','column');
+		unidad.setAttribute('class','column');		
 		unidad.setAttribute('draggable','true');		
 		footer.innerHTML = texto;
 		if(texto == 'ohm'){
@@ -515,8 +521,8 @@
 		unidad.appendChild(label);		
 		unidad.appendChild(footer);
 		setDragAndDropProp(unidad);
-		unidadesExistentes[unidadesExistentes.length] = texto;
-		columna.appendChild(unidad);
+		unidadesExistentes[unidadesExistentes.length] = texto;		
+		columna.appendChild(unidad);		
 		if(column == 'col1')
 			centinelColumnas = 1;
 		else if(column == 'col2')
