@@ -23,6 +23,8 @@
 		text-shadow: 0 0 0.2em gray, 0 0 0.2em gray;
 		font-size: 60%;
 	}
+	
+	#contadorUnidades{font-size: 1.2em;}
 /* :: Columna del Contador de Unidades
 ---------------------------------------------------------------
 ---------------------------------------------------------------

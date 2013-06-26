@@ -17,23 +17,26 @@
 	/*unidadesExistentes: Se guardan las unidades que se creen en la aplicación. Inicialmente tiene 4 unidades*/
 	var unidadesExistentes = ['metro','kilogramo','segundo','ampere']; 
 																	   
-    /*toolTiped: Sirve para extraer la información que será mostrada en el tooltip de cada nueva unidad creada.*/	
-	var toolTiped = {'metro2': 'm*m',
-					 'metro3': 'm^2*m',
-					 'hertz': '1/s',
-					 'newton': '(m*kg)/s^2',
-					 'joule': 'N*m',
-					 'watt': 'J/s',
-					 'coulomb': 'A*s',
-					 'volt': 'W/A',
-					 'ohm': 'V/A',
-					 'farad': 'C/V',
-					 'weber': 'V*s',
-					 'tesla': 'Wb/m^2',
-					 'henry': 'Wb/A'};
-					
+    /*tooltips: Sirve para extraer la información que será mostrada en el tooltip de cada nueva unidad creada.*/	
+	var tooltips = {
+					'metro2': 'm*m',
+					'metro3': 'm^2*m',
+					'hertz': '1/s',
+					'newton': '(m*kg)/s^2',
+					'joule': 'N*m',
+					'watt': 'J/s',
+					'coulomb': 'A*s',
+					'volt': 'W/A',
+					'ohm': 'V/A',
+					'farad': 'C/V',
+					'weber': 'V*s',
+					'tesla': 'Wb/m^2',
+					'henry': 'Wb/A'
+					};
+
 	/*simbolos: Diccionario en el cual se buscará el símbolo de una determinada unidad.*/
-	var simbolos = {'metro': 'm',
+	var simbolos = {
+					'metro': 'm',
 					'segundo': 's',
 					'kilogramo': 'kg',
 					'ampere': 'A',
@@ -49,13 +52,14 @@
 					'farad': 'F',
 					'weber': 'Wb',
 					'tesla': 'T',
-					'henry': 'H'};
+					'henry': 'H'
+					};
 					 
 	/*diccionario: Contiene todas (o casi todas) las posibles combinaciones de unidades que representen otra unidad.*/
 	var diccionario = "";
-	
-	var unidadesRestantes = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'];
+		
 	var unidadesRestantesStatic = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'];
+	var unidadesRestantes = unidadesRestantesStatic.slice(0,unidadesRestantesStatic.length);
 	
 	var dragSrcEl = null;
 	
@@ -126,6 +130,12 @@
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
 		e.dataTransfer.setData('text/html', this.innerHTML);
+		console.log('Area de multiplicacion: ');
+		console.log('Left:' + getOffset(document.querySelector('#mult')).left);		
+		console.log('Top:' + getOffset(document.querySelector('#mult')).top);
+		console.log('Area de división: ');
+		console.log('Left:' + getOffset(document.querySelector('#division')).left);
+		console.log('Top:' + getOffset(document.querySelector('#division')).top);
 	}
 	
 	function handleDragOver(e){
@@ -260,9 +270,6 @@
 			centinel = 0;
 			if(diccionario[combMult]){
 				combMult = diccionario[combMult];				
-				
-				obtenerUnidades();
-				
 				this.innerHTML = "";
 				centinelMult = 0;
 				if(centinelColumnas == 0)
@@ -277,9 +284,6 @@
 			if(centinel == 0){				
 				if(diccionario[superComb]){
 					combMult = diccionario[superComb];
-													
-					obtenerUnidades();
-					
 					this.innerHTML = "";
 					centinelMult = 0;
 					document.getElementById('division').innerHTML = "";
@@ -294,7 +298,7 @@
 				}
 			}
 			if(activarTooltip){
-				document.getElementById('mult').setAttribute('title',toolTiped[combMult]); //se agrega el tooltip a la unidad creada en el area de mult.
+				document.getElementById('mult').setAttribute('title',tooltips[combMult]); //se agrega el tooltip a la unidad creada en el area de mult.
 				if(centinelMensaje){
 					mensaje(combMult); //se agrega el mensaje de éxito.
 					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
@@ -461,9 +465,9 @@
 			}
 			if(activarTooltip){ //se agrega el tooltip a la unidad creada en el area respectiva.
 				if(combMult != "")
-					document.getElementById('mult').setAttribute('title',toolTiped[combMult]);								
+					document.getElementById('mult').setAttribute('title',tooltips[combMult]);								
 				else if(combDiv != "")
-					document.getElementById('division').setAttribute('title',toolTiped[combMult]);
+					document.getElementById('division').setAttribute('title',tooltips[combMult]);
 				if(centinelMensaje){
 					mensaje(combMult); //se agrega el mensaje de éxito.
 					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
@@ -662,14 +666,14 @@
 		element.addEventListener('dragleave', handleDragLeave, false);
 		element.addEventListener('drop', handleDrop, false);
 		element.addEventListener('dragend', handleDragEnd, false);
-	}		
-		
-	function obtenerUnidades(){
+	}
+	
+	function getUnits(){
 		$.ajax({
 			dataType: "json",
-			async:false,
-			url: 'json/unidades_json.json',			
-			//url: './php/unidades_php.php',
+			async: false,
+			url: 'json/units_json.json',			
+			//url: './php/units_php.php',
 			type: "GET",
 			success: function(respuesta){				
 				diccionario = respuesta;
@@ -695,3 +699,26 @@
 	div.addEventListener('dragover', handleDragOver, false);
 	div.addEventListener('dragleave', handleDragLeave, false);		
 	div.addEventListener('dragend', handleDragEnd, false);
+	
+	
+	function getOffset(el){
+		var _x = 0;
+		var _y = 0;
+		while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+			_x += el.offsetLeft - el.scrollLeft;
+			_y += el.offsetTop - el.scrollTop;
+			el = el.offsetParent;
+		}
+		return { top: _y, left: _x };
+	}
+	
+	function init(){
+		document.querySelector("#btnVaciar").addEventListener('click',limpiarPizarra,false);
+		document.querySelector("#btnReinicio").addEventListener('click',reset,false);
+		document.querySelector("#mensaje div").style.color = "gray";
+		document.querySelector("#mensaje div").style.marginLeft = "2%";		
+		getUnits();		
+	}
+	
+	window.onload = init();
+	
