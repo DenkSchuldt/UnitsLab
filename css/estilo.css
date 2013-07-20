@@ -12,7 +12,7 @@
 	#cabecera #mensaje{
 		margin-top: 1%;
 		width: 100%;
-		position: absolute;		
+		position: absolute;
 	}	
 	#cabecera h1{		
 		margin-top: 2%;
@@ -22,6 +22,7 @@
 	#cabecera label{
 		text-shadow: 0 0 0.2em gray, 0 0 0.2em gray;
 		font-size: 60%;
+		cursor: default;
 	}
 	
 	#contadorUnidades{font-size: 1.2em;}
@@ -165,8 +166,8 @@
 		position: fixed;
 		bottom: 2%;
 		left: 2%;
-		width: 3.5%;
-		height: 6.5%;		
+		width: 45px;
+		height: 45px;
 		z-index: 2;
 		opacity: 0.6;
 		background-image: url(../img/facebookNew.jpg);
@@ -183,8 +184,8 @@
 		position: fixed;
 		bottom: 2%;
 		left: 6%;
-		width: 3.5%;
-		height: 6.5%;		
+		width: 45px;
+		height: 45px;
 		z-index: 2;
 		opacity: 0.6;
 		background-image: url(../img/twitterNew.jpg);
@@ -201,8 +202,8 @@
 		position: fixed;
 		bottom: 2%;
 		left: 10%;
-		width: 3.5%;
-		height: 6.5%;		
+		width: 45px;
+		height: 45px;
 		z-index: 2;
 		opacity: 0.6;
 		background-image: url(../img/githubNew.jpg);

@@ -1,132 +1,61 @@
 
-/*Modificaciones:
- - Crear un arreglo para las unidades en el area de multiplicacion, y otro para el area
-   de división.
- - Al agregar una ficha a un area, agregar esta al array correspondiente.
- - Concatenar todos los elementos del array antes de enviarlos al diccionario.
- - Si hay respuesta, vaciar el arreglo y colocar la nueva ficha en mult.*/ 
+	/* DECLARACIONES DE VARIABLES*/
 	
-	var cols = document.querySelectorAll('#columns .column');
+	var cols = document.querySelectorAll('#columns .column'),
+		mult = document.getElementById('mult'),
+		div  = document.getElementById('division'),
+		unidadesExistentes      = ['metro','kilogramo','segundo','ampere'],
+		unidadesRestantesStatic = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'],
+		unidadesRestantes       = unidadesRestantesStatic.slice(0,unidadesRestantesStatic.length),
+		dragSrcEl        = null,
+		superComb        = '',
+		combMult         = '',
+		combDiv          = '',
+		centinel         = 0,
+		centinelMult     = 0,
+		centinelDiv      = 0,
+		centinelColumnas = 0,
+		activarTooltip   = false,
+		centinelMensaje  = false,
+		tooltips = {
+			'metro2' : 'm*m',
+			'metro3' : 'm^2*m',
+			'hertz'  : '1/s',
+			'newton' : '(m*kg)/s^2',
+			'joule'  : 'N*m',
+			'watt'   : 'J/s',
+			'coulomb': 'A*s',
+			'volt'   : 'W/A',
+			'ohm'    : 'V/A',
+			'farad'  : 'C/V',
+			'weber'  : 'V*s',
+			'tesla'  : 'Wb/m^2',
+			'henry'  : 'Wb/A'
+		},
+		simbolos = {
+			'metro'    : 'm',
+			'segundo'  : 's',
+			'kilogramo': 'kg',
+			'ampere'   : 'A',
+			'metro2'   : 'm<sup>2</sup>',
+			'metro3'   : 'm<sup>3</sup>',
+			'hertz'    : 'Hz',
+			'newton'   : 'N',
+			'joule'    : 'J',
+			'watt'     : 'W',
+			'coulomb'  : 'C',
+			'volt'     : 'V',
+			'ohm'      : 'w',
+			'farad'    : 'F',
+			'weber'    : 'Wb',
+			'tesla'    : 'T',
+			'henry'    : 'H'
+		};		
 	
-	//mult: Area de multiplicación de las unidades
-	var mult = document.getElementById('mult');
 	
-	//div: Area de división de las unidades
-	var div = document.getElementById('division');
+	/* IMPLEMENTACIONES DE FUNCIONES */	
 	
-	/*unidadesExistentes: Se guardan las unidades que se creen en la aplicación. Inicialmente tiene 4 unidades*/
-	var unidadesExistentes = ['metro','kilogramo','segundo','ampere']; 
-																	   
-    /*tooltips: Sirve para extraer la información que será mostrada en el tooltip de cada nueva unidad creada.*/	
-	var tooltips = {
-					'metro2': 'm*m',
-					'metro3': 'm^2*m',
-					'hertz': '1/s',
-					'newton': '(m*kg)/s^2',
-					'joule': 'N*m',
-					'watt': 'J/s',
-					'coulomb': 'A*s',
-					'volt': 'W/A',
-					'ohm': 'V/A',
-					'farad': 'C/V',
-					'weber': 'V*s',
-					'tesla': 'Wb/m^2',
-					'henry': 'Wb/A'
-					};
-
-	/*simbolos: Diccionario en el cual se buscará el símbolo de una determinada unidad.*/
-	var simbolos = {
-					'metro': 'm',
-					'segundo': 's',
-					'kilogramo': 'kg',
-					'ampere': 'A',
-					'metro2': 'm<sup>2</sup>',
-					'metro3': 'm<sup>3</sup>',
-					'hertz': 'Hz',
-					'newton': 'N',
-					'joule': 'J',
-					'watt': 'W',
-					'coulomb': 'C',
-					'volt': 'V',
-					'ohm': 'w',
-					'farad': 'F',
-					'weber': 'Wb',
-					'tesla': 'T',
-					'henry': 'H'
-					};
-					 
-	/*diccionario: Contiene todas (o casi todas) las posibles combinaciones de unidades que representen otra unidad.*/
-	var diccionario = "";
-		
-	var unidadesRestantesStatic = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'];
-	var unidadesRestantes = unidadesRestantesStatic.slice(0,unidadesRestantesStatic.length);
-	
-	var dragSrcEl = null;
-	
-	/*superComb: Cadena compuesta por las cadenas 'combMult' y 'combDiv', de manera que ambas están separadas por '/'. SuperComb se 
-				 reestructurará luego de que una ficha sea soltada en el area de interacción. Así, se podrá saber si las unidades
-				 que se han arrastrado, representan otra unidad.*/	
-	var superComb = '';
-	
-	/*combMult: Cadena compuesta por las unidades que han sido arrastradas al area de multiplicación*/
-	var combMult = '';
-	
-	/*combMult: Cadena compuesta por las unidades que han sido arrastradas al area de división*/
-	var combDiv = '';
-	
-	/*centinel: Permite conocer si cierto bloque de código debe ejecutarse luego de que otro bloque de código ha sido ejecutado. Por ejemplo,
-				si una unidad arrastada al area de multiplicación ha sido simplificada con una unidad en el area de división, esta no debe ser
-				agregada al area de interacción, ni mucho menos agregada a la cadena 'combMult'*/
-	var centinel = 0;
-	
-	/*centinelMult: Lleva la cuenta de cuántas unidades han sido arrastradas al area de multiplicación, siendo el límite 5.*/
-	var centinelMult = 0;
-	
-	/*centinelMult: Lleva la cuenta de cuántas unidades han sido arrastradas al area de multiplicación, siendo el límite 5.*/
-	var centinelDiv = 0;
-	
-	/*centinelColumnas: Ocupa los valores de 0 o 1, los mismos que indican en qué columna (col1 o col2), debe ser colocada la nueva unidad credad,
-						que aun no se encuentre en el array de unidadesExistentes. Seguido de esto, se agrega esta unidad al array.*/
-	var centinelColumnas = 0;
-	
-	/*activarTooltip: Si toma el valor de 'true', entonces se agrega un tooltip a la nueva unidad creada, sobre el area de multiplicación o división.
-					  El toolTip es removido al agregar otra unidad al area de interacción.*/
-	var activarTooltip = false;
-	
-	/*centinelMensaje: Si toma el valor de 'true', aparecerá un mensaje de éxito indicandole al jugador que una nueva unidad ha sido creada,
-					   caso contrario, aparece un mensaje de información indicando que la unidad en cuestión, ya ha sido creada antes.*/
-	var centinelMensaje = false;
-	
-	function modificarUnidadesRestantes(elemento){				 
-		var tmp = "";		
-		if(elemento == "metro2") tmp = "#m2";
-		else if(elemento == "metro3") tmp = "#m3";
-		else tmp = "#"+simbolos[elemento];
-		$(tmp).jrumble({x: 8,y: 8,rotation: 4});
-		$(tmp).trigger('startRumble');
-		setTimeout(function(){
-			$(tmp).trigger('stopRumble');
-			$(tmp).fadeOut('slow');
-		},500);
-	}
-	
-	function ubicarUnidadesRestantes(){
-		unidadesRestantes.length = 0;
-		unidadesRestantes = unidadesRestantesStatic.slice();
-		document.getElementById('seccionDos').innerHTML = "<h4>Unidades restantes:</h4>";
-		for(var i in unidadesRestantes){			
-			if(unidadesRestantes[i] == "metro2") 
-				document.getElementById('seccionDos').innerHTML += '<p id="m2">' + unidadesRestantes[i] + '</p>';
-			else if(unidadesRestantes[i] == "metro3") 
-				document.getElementById('seccionDos').innerHTML += '<p id="m3">' + unidadesRestantes[i] + '</p>';
-			else
-				document.getElementById('seccionDos').innerHTML += '<p id=' + simbolos[unidadesRestantes[i]] + '>' + unidadesRestantes[i] + '</p>';
-		}
-		
-	}
-	
-	function handleDragStart(e){	
-		this.style.opacity = '0.9';
+	function handleDragStart(e){		
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
 		e.dataTransfer.setData('text/html', this.innerHTML);
@@ -165,26 +94,14 @@
 		return false;
 	}
 
-	/*
-	 * Función: handleDropMult
-	 * Descripción: 
-	 * -----------------------
-	 * Verifica los sucesos al hacer drop sobre el area de MULTIPLICACIÓN.
-	 */
 	function handleDropMult(e){
-		activarTooltip = false;
-		centinelMensaje = false;
+		activarTooltip = centinelMensaje = false;
 		centinel = 0;
-		if (e.stopPropagation){
-			e.stopPropagation();
-		}
+		if (e.stopPropagation) e.stopPropagation();		
 		if (dragSrcEl != this){
-			var element = $(e.dataTransfer.getData('text/html')).next();
-			/*Este bloque solo se ejecuta si la unidad arrastrada es uno de los 3 metros. Evalua si la
-			  unidad en cuestión debe ser simplificada con una unidad en el area de división.*/
-			//-----------------------------------------------------------
-			if(element.text().indexOf("metro") != -1){
-				if(element.text().indexOf("metro3") != -1){
+			var element = $(e.dataTransfer.getData('text/html')).next().text();
+			if(element.indexOf("metro") != -1){
+				if(element.indexOf("metro3") != -1){
 					if(combDiv.indexOf('metro3') != -1){
 						$("#division div.metro3").first().remove();
 						combDiv = combDiv.replace("metro3","");
@@ -208,7 +125,7 @@
 						centinel = 1;
 					}					
 				}
-				else if(element.text().indexOf("metro2") != -1){
+				else if(element.indexOf("metro2") != -1){
 					if(combDiv.indexOf('metro3') != -1){
 						$("#division div.metro3").first().remove();
 						combDiv = combDiv.replace("metro3","metro");
@@ -231,7 +148,7 @@
 						centinel = 1;
 					}					
 				}
-				else if(element.text() == 'metro'){
+				else if(element == 'metro'){
 					if(combDiv.indexOf('metro3') != -1){
 						$("#division div.metro3").first().remove();
 						combDiv = combDiv.replace("metro3","metro2");
@@ -253,92 +170,66 @@
 						centinel = 1;
 					}					
 				}				
-			}//-----------------------------------------------------------
-			
-			else if(combDiv.indexOf(element.text()) != -1){
-				//ingresa si una unidad debe ser simplificada con otra unidad en el area de división.
-				combDiv = combDiv.replace(element.text(),""); //modo interno
-				$("#division div."+element.text()).first().remove(); //modo grafico
+			}			
+			else if(combDiv.indexOf(element) != -1){				
+				combDiv = combDiv.replace(element,"");
+				$("#division div."+element).first().remove();
 				centinelDiv--;
 				centinel = 1;
 			}
 			if(centinel == 0){
-				if(centinelMult < 5)
-					combMult = combMult + element.text(); //modo interno				
-				addElementOnArea(element.text(),'mult'); //modo grafico (con validación de colocar unidad incluida)							
+				if(centinelMult < 5) combMult = combMult + element;
+				addElementOnArea(element,'mult');
 			}
 			centinel = 0;
 			if(diccionario[combMult]){
 				combMult = diccionario[combMult];				
 				this.innerHTML = "";
 				centinelMult = 0;
-				if(centinelColumnas == 0)
-					addElementInColumn(combMult,"col1");
-				else
-					addElementInColumn(combMult,"col2");
+				if(centinelColumnas == 0) addElementInColumn(combMult,"col1");
+				else addElementInColumn(combMult,"col2");
 				addElementOnArea(combMult,'mult');
 				activarTooltip = true;
 				centinel = 1;
 			}
-			superComb = combMult + '/' + combDiv; //No hay problema si superComb no tiene validación, pues el centinel de la siguiente linea lo hace.
+			superComb = combMult + '/' + combDiv;
 			if(centinel == 0){				
 				if(diccionario[superComb]){
 					combMult = diccionario[superComb];
 					this.innerHTML = "";
 					centinelMult = 0;
-					document.getElementById('division').innerHTML = "";
-					if(centinelColumnas == 0)
-						addElementInColumn(combMult,"col1");					
-					else
-						addElementInColumn(combMult,"col2");
+					$('#division').empty();
+					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");					
+					else addElementInColumn(combMult,"col2");
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
-					superComb = '';
-					combDiv = '';
+					superComb = combDiv = '';
 				}
 			}
 			if(activarTooltip){
-				document.getElementById('mult').setAttribute('title',tooltips[combMult]); //se agrega el tooltip a la unidad creada en el area de mult.
+				$('#mult').attr('title',tooltips[combMult]);
 				if(centinelMensaje){
-					mensaje(combMult); //se agrega el mensaje de éxito.
-					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
+					mensaje(combMult);
+					modificarUnidadesRestantes(combMult);
 				}
-				else
-					mensaje("repeat");  //se agrega el mensaje de información
+				else mensaje("repeat");
 				modificarContador(unidadesExistentes.length);
 			}else{
-				document.getElementById('mult').removeAttribute('title');
-				mensaje("default"); //se agrega el mensaje por defecto (el que está al inicio de la app).
+				$('#mult').removeAttr('title');
+				mensaje("default");
 			}
-		}
-		console.log('SuperComb: ' + superComb);
-		console.log('CombMult: ' + combMult);
-		console.log('CombDiv: ' + combDiv);
-		console.log('centinelMult: ' + centinelMult);
-		console.log('centinelDiv: ' + centinelDiv);
+		}		
 		return false;
 	}
-	
-	/*
-	 * Función: handleDropDiv
-	 * Descripción: 
-	 * ----------------------
-	 * Verifica los sucesos al hacer drop sobre el area de DIVISIÓN.
-	 */	
+		
 	function handleDropDiv(e){
-		activarTooltip = false;
-		centinelMensaje = false;
+		activarTooltip = centinelMensaje = false;
 		centinel = 0;
-		if(e.stopPropagation){
-			e.stopPropagation();
-		}
-		if(dragSrcEl != this){ // contenedor en este método
-			var element = $(e.dataTransfer.getData('text/html')).next();
-			/*Este bloque solo se ejecuta si la unidad arrastrada es uno de los 3 metros. Evalua si la
-			  unidad en cuestión debe ser simplificada con una unidad en el area de multiplicación.*/
-			//-----------------------------------------------------------
-			if(element.text().indexOf("metro") != -1){
-				if(element.text().indexOf("metro3") != -1){
+		if(e.stopPropagation) e.stopPropagation();		
+		if(dragSrcEl != this){
+			var element = $(e.dataTransfer.getData('text/html')).next().text();			
+			if(element.indexOf("metro") != -1){
+				if(element.indexOf("metro3") != -1){
 					if(combMult.indexOf('metro3') != -1){
 						$("#mult div.metro3").first().remove();
 						combMult = combMult.replace("metro3","");
@@ -362,7 +253,7 @@
 						centinel = 1;
 					}					
 				}
-				else if(element.text().indexOf("metro2") != -1){
+				else if(element.indexOf("metro2") != -1){
 					if(combMult.indexOf('metro3') != -1){
 						$("#mult div.metro3").first().remove();
 						combMult = combMult.replace("metro3","metro");
@@ -385,7 +276,7 @@
 						centinel = 1;
 					}					
 				}
-				else if(element.text() == 'metro'){
+				else if(element == 'metro'){
 					if(combMult.indexOf('metro3') != -1){
 						$("#mult div.metro3").first().remove();
 						combMult = combMult.replace("metro3","metro2");
@@ -407,40 +298,35 @@
 						centinel = 1;
 					}					
 				}				
-			}//-----------------------------------------------------------
+			}
 			
-			else if(combMult.indexOf(element.text()) != -1){
-				//ingresa si una unidad debe ser simplificada con otra unidad en el area de multiplicación.
-				combMult = combMult.replace(element.text(),""); //modo interno
-				$("#mult div."+element.text()).first().remove(); //modo gráfico
-				centinelMult--;				
-				centinel = 1;				
-				if(diccionario[combMult]){ //luego de que las unidades se simplifiquen, es posible que se pueda formar una nueva unidad en el area de multiplicación.
+			else if(combMult.indexOf(element) != -1){				
+				combMult = combMult.replace(element,"");
+				$("#mult div."+element).first().remove();
+				centinelMult--;
+				centinel = 1;
+				if(diccionario[combMult]){
 					combMult = diccionario[combMult];					
-					document.getElementById('mult').innerHTML = "";
+					$('#mult').empty();
 					centinelMult = 0;
-					if(centinelColumnas == 0)
-						addElementInColumn(combMult,"col1");					
-					else
-						addElementInColumn(combMult,"col2");										
+					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");					
+					else addElementInColumn(combMult,"col2");										
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
 				}
 			}
 			if(centinel == 0){
 				if(centinelDiv < 5)
-					combDiv = combDiv + element.text(); //modo interno
-				addElementOnArea(element.text(),'division'); //modo grafico (con validación de colocar unidad incluida)
+					combDiv = combDiv + element;
+				addElementOnArea(element,'division');
 			}
 			centinel = 0;
 			if(diccionario[combDiv]){
 				combDiv = diccionario[combDiv];
 				this.innerHTML = "";
 				centinelDiv = 0;
-				if(centinelColumnas == 0)
-					addElementInColumn(combDiv,"col1");				
-				else
-					addElementInColumn(combDiv,"col2");								
+				if(centinelColumnas == 0) addElementInColumn(combDiv,"col1");				
+				else addElementInColumn(combDiv,"col2");								
 				addElementOnArea(combDiv,'division');
 				activarTooltip = true;
 				centinel = 1;
@@ -450,42 +336,32 @@
 				if(diccionario[superComb]){
 					combMult = diccionario[superComb];
 					combDiv = '';
-					document.getElementById('mult').innerHTML = "";
+					$('#mult').empty();
 					this.innerHTML = "";
-					centinelMult = 0;
-					centinelDiv = 0;
-					if(centinelColumnas == 0)
-						addElementInColumn(combMult,"col1");						
-					else
-						addElementInColumn(combMult,"col2");											
+					centinelMult = centinelDiv = 0;
+					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");						
+					else addElementInColumn(combMult,"col2");											
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
 					superComb = '';
 				}
 			}
-			if(activarTooltip){ //se agrega el tooltip a la unidad creada en el area respectiva.
-				if(combMult != "")
-					document.getElementById('mult').setAttribute('title',tooltips[combMult]);								
-				else if(combDiv != "")
-					document.getElementById('division').setAttribute('title',tooltips[combMult]);
+			if(activarTooltip){
+				if(combMult != "") $('#mult').attr('title',tooltips[combMult]);								
+				else if(combDiv != "") $('#division').attr('title',tooltips[combMult]);
 				if(centinelMensaje){
-					mensaje(combMult); //se agrega el mensaje de éxito.
-					modificarUnidadesRestantes(combMult); //se elimina esa unidad de la lista de unidades restantes.
+					mensaje(combMult);
+					modificarUnidadesRestantes(combMult);
 				}
 				else
-					mensaje("repeat"); //se agrega el mensaje de información.
+					mensaje("repeat");
 				modificarContador(unidadesExistentes.length);
 			}else{
-				document.getElementById('mult').removeAttribute('title');
-				document.getElementById('division').removeAttribute('title');
-				mensaje("default"); //se agrega el mensaje por defecto (el que está al inicio de la app).
+				$('#mult').removeAttr('title');
+				$('#division').removeAttr('title');
+				mensaje("default");
 			}
 		}
-		console.log('SuperComb: ' + superComb);
-		console.log('CombMult: ' + combMult);
-		console.log('CombDiv: ' + combDiv);
-		console.log('centinelMult: ' + centinelMult);
-		console.log('centinelDiv: ' + centinelDiv);
 		return false;
 	}
 	
@@ -496,18 +372,10 @@
 		this.style.opacity = '1';
 	}
 	
-	/*
-	 * Función: addElementInColumn
-	 * Descripción: 
-	 * ----------------------
-	 * Esta función agrega a la barra de unidades una nueva unidad formada, en caso de que la misma no se encuentre ya en las columnas. 
-	 * (función para el método gráfico)
-	 */	
 	function addElementInColumn(texto,column){
 		for(elemento in unidadesExistentes){
 			if(unidadesExistentes[elemento] == texto)
-				return false;
-			//Si la unidad se encuentra en el array de unidades existentes, no la agrega a la columna respectiva.
+				return false;			
 		}
 		centinelMensaje = true;
 		var columna = document.getElementById(column);
@@ -527,25 +395,13 @@
 		setDragAndDropProp(unidad);
 		unidadesExistentes[unidadesExistentes.length] = texto;		
 		columna.appendChild(unidad);		
-		if(column == 'col1')
-			centinelColumnas = 1;
-		else if(column == 'col2')
-			centinelColumnas = 0;
-		//modificarContador(unidadesExistentes.length);
+		if(column == 'col1') centinelColumnas = 1;
+		else if(column == 'col2') centinelColumnas = 0;
 	}	
-	
-	/*
-	 * Función: addElementOnArea
-	 * Descripción: 
-	 * ----------------------
-	 * Agrega la unidad arrastrada al area de interaccción, luego de haber validado que en dicha area existan menos de 5 unidades.
-	 * (función para el método gráfico)
-	 */	
+		
 	function addElementOnArea(texto, area){
-		if((area == 'mult') && (centinelMult >= 5))
-			return false;
-		if((area == 'mdivision') && (centinelDiv >= 5))
-			return false;
+		if((area == 'mult') && (centinelMult >= 5)) return false;
+		if((area == 'mdivision') && (centinelDiv >= 5)) return false;
 		var sector = document.getElementById(area);
 		var unidad = document.createElement("div");
 		var footer = document.createElement("footer");
@@ -561,79 +417,13 @@
 		unidad.appendChild(label);
 		unidad.appendChild(footer);		
 		sector.appendChild(unidad);
-		if(area == 'mult')
-			centinelMult++;
-		if(area == 'division')
-			centinelDiv++;
-	}
-
-	/*
-	 * Función: limpiarPizarra
-	 * Descripción: 
-	 * ----------------------
-	 * 'Borra' las unidades del area de interacción, 'pizarra', y settea los valores centinelas y demás a su estado original.
-	 */	
-	function limpiarPizarra(){
-		document.getElementById('mult').innerHTML='';
-		document.getElementById('division').innerHTML='';		
-		centinelMult = 0;
-		centinelDiv = 0;
-		superComb = '';
-		combMult = '';
-		combDiv = '';
+		if(area == 'mult') centinelMult++;
+		if(area == 'division') centinelDiv++;
 	}
 	
-	/*
-	 * Función: reset
-	 * Descripción: 
-	 * ----------------------
-	 * Settea la aplicación como estaba en el inicio. Las unidades de las columnas son removidas, dejando solo las cuatro iniciales.
-	 */	
-	function reset(){
-		document.getElementById('mult').innerHTML='';
-		document.getElementById('division').innerHTML='';
-		superComb = '';
-		combMult = '';
-		combDiv = '';
-		subTmp = '';
-		centinel = 0;
-		centinelMult = 0;
-		centinelDiv = 0;
-		centinelColumnas = 0;				
-		if(unidadesExistentes.length != 4){
-			$('.column').remove();
-			unidadesExistentes = [];
-			var col1 = document.getElementById("col1");
-			var col2 = document.getElementById("col2");			
-			addElementInColumn('metro',"col1");
-			addElementInColumn('kilogramo',"col1");
-			addElementInColumn('segundo',"col2");			
-			addElementInColumn('ampere',"col2");
-		}
-		modificarContador(unidadesExistentes.length);
-		mensaje("default");
-		ubicarUnidadesRestantes();
-    }	
-	
-	/*
-	 * Función: removeMensaje
-	 * Descripción: 
-	 * ----------------------
-	 * Remueve el mensaje que se esté mostrando al usuario.
-	 */	
-	function removeMensaje(){
-		document.getElementById('mensaje').innerHTML = "";
-	}
-	
-	/*
-	 * Función: mensaje
-	 * Descripción: 
-	 * ----------------------
-	 * Muestra un mensaje de éxito, información, o el mensaje default, dependiendo de lo que reciba por parámetro.
-	 */
 	function mensaje(unidad){
-		var ruta = document.getElementById("mensaje");
-		removeMensaje();
+		var ruta = $("#mensaje");
+			ruta.empty();		
 		var p = document.createElement("p");
 		if(unidad == 'default'){
 			p.setAttribute('style','color:gray;margin-left:2%;');
@@ -644,19 +434,66 @@
 		}else{			
 			p.setAttribute('style','color:darkgreen;margin-left:2%;');
 			p.innerHTML = '<b>Enhorabuena!</b> Has creado una nueva unidad: <b>' + unidad + '</b>';
-		}
-		ruta.appendChild(p);
-	}		
+		}		
+		ruta.append(p);
+		console.log(ruta);
+	}
 	
-	/*
-	 * Función: modificarContador
-	 * Descripción: 
-	 * ----------------------
-	 * Actualiza el contador de los elementos que han sido creados, el mismo que se encuentra en la parte superior izquierda de la app, y cuyo límite es 17.
-	 */
+	function limpiarPizarra(){
+		$('#mult').html('');
+		$('#division').html('');		
+		centinelMult = centinelDiv = 0;
+		superComb = combMult = combDiv = '';
+		mensaje("default");
+	}
+		
+	function reset(){
+		$('#mult').html('');
+		$('#division').html('');
+		superComb = combMult = combDiv = subTmp = '';		 
+		centinel = centinelMult = centinelDiv = centinelColumnas = 0;				
+		if(unidadesExistentes.length != 4){
+			$('.column').remove();
+			unidadesExistentes = [];
+			addElementInColumn('metro',"col1");
+			addElementInColumn('kilogramo',"col1");
+			addElementInColumn('segundo',"col2");			
+			addElementInColumn('ampere',"col2");
+		}
+		modificarContador(unidadesExistentes.length);
+		mensaje("default");
+		reiniciarUnidadesRestantes();
+    }	
+	
+	function reiniciarUnidadesRestantes(){
+		unidadesRestantes.length = 0;
+		unidadesRestantes = unidadesRestantesStatic.slice();				
+		$('#seccionDos').html("<h4>Unidades restantes:</h4>");
+		for(var i in unidadesRestantes){			
+			var p = document.createElement('p');			
+				p.appendChild(document.createTextNode(unidadesRestantes[i]));
+			if(unidadesRestantes[i] == "metro2") p.setAttribute('id','m2');
+			else if(unidadesRestantes[i] == "metro3") p.setAttribute('id','m3');
+			else p.setAttribute('id',simbolos[unidadesRestantes[i]]);				
+			$('#seccionDos').append(p);
+		}		
+	}	
+	
+	function modificarUnidadesRestantes(elemento){				 
+		var tmp = "";		
+		if(elemento == "metro2") tmp = "#m2";
+		else if(elemento == "metro3") tmp = "#m3";
+		else tmp = "#"+simbolos[elemento];
+		$(tmp).jrumble({x: 8,y: 8,rotation: 4});
+		$(tmp).trigger('startRumble');
+		setTimeout(function(){
+			$(tmp).trigger('stopRumble');
+			$(tmp).fadeOut('slow');			
+		},500);
+	}
+	
 	function modificarContador(contadorDeUnidades){		
-		var documento = document.getElementById('contadorUnidades');
-		documento.innerHTML = contadorDeUnidades + "/17";
+		$('contadorUnidades').html(contadorDeUnidades + "/17");
 	}
 	
 	function setDragAndDropProp(element){
@@ -672,8 +509,7 @@
 		$.ajax({
 			dataType: "json",
 			async: false,
-			url: 'json/units_json.json',			
-			//url: './php/units_php.php',
+			url: 'json/units_json.json',
 			type: "GET",
 			success: function(respuesta){				
 				diccionario = respuesta;
