@@ -1,7 +1,7 @@
 
 	/* DECLARACIONES DE VARIABLES*/
 	
-	var cols = document.querySelectorAll('#columns .column'),
+	var cols = document.querySelectorAll('aside .unit'),
 		mult = document.getElementById('mult'),
 		div  = document.getElementById('division'),
 		unidadesExistentes      = ['metro','kilogramo','segundo','ampere'],
@@ -14,9 +14,11 @@
 		centinel         = 0,
 		centinelMult     = 0,
 		centinelDiv      = 0,
-		centinelColumnas = 0,
 		activarTooltip   = false,
 		centinelMensaje  = false,
+		WIDTH = 0,
+		HEIGHT = 0,
+		MAX_UNITS = 0,
 		tooltips = {
 			'metro2' : 'm*m',
 			'metro3' : 'm^2*m',
@@ -55,16 +57,21 @@
 	
 	/* IMPLEMENTACIONES DE FUNCIONES */	
 	
-	function handleDragStart(e){		
+	function handleDragStart(e){
 		dragSrcEl = this;
 		e.dataTransfer.effectAllowed = 'move';
 		e.dataTransfer.setData('text/html', this.innerHTML);
-		console.log('Area de multiplicacion: ');
-		console.log('Left:' + getOffset(document.querySelector('#mult')).left);		
-		console.log('Top:' + getOffset(document.querySelector('#mult')).top);
-		console.log('Area de división: ');
-		console.log('Left:' + getOffset(document.querySelector('#division')).left);
-		console.log('Top:' + getOffset(document.querySelector('#division')).top);
+		var unit_width, unit_height;
+		WIDTH = document.querySelector('#mult').offsetWidth;
+		HEIGHT = document.querySelector('#mult').offsetHeight;
+		unit_width = document.querySelector('.unit').offsetWidth + 20;
+		if(WIDTH < (unit_width * 6)) MAX_UNITS = 5;
+		if(WIDTH < (unit_width * 5)) MAX_UNITS = 4;
+		if(WIDTH < (unit_width * 4)) MAX_UNITS = 3;
+		if(WIDTH < (unit_width * 3)) MAX_UNITS = 2;
+		if(WIDTH < (unit_width * 2)) MAX_UNITS = 1;
+		console.log("Ancho del area: " + WIDTH);
+		console.log("Ancho de unidad: " + unit_width);
 	}
 	
 	function handleDragOver(e){
@@ -95,6 +102,7 @@
 	}
 
 	function handleDropMult(e){
+		if(centinelMult >= MAX_UNITS) return false;
 		activarTooltip = centinelMensaje = false;
 		centinel = 0;
 		if (e.stopPropagation) e.stopPropagation();		
@@ -186,8 +194,7 @@
 				combMult = diccionario[combMult];				
 				this.innerHTML = "";
 				centinelMult = 0;
-				if(centinelColumnas == 0) addElementInColumn(combMult,"col1");
-				else addElementInColumn(combMult,"col2");
+				addElementInColumn(combMult);
 				addElementOnArea(combMult,'mult');
 				activarTooltip = true;
 				centinel = 1;
@@ -199,8 +206,7 @@
 					this.innerHTML = "";
 					centinelMult = 0;
 					$('#division').empty();
-					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");					
-					else addElementInColumn(combMult,"col2");
+					addElementInColumn(combMult);
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
 					superComb = combDiv = '';
@@ -213,7 +219,6 @@
 					modificarUnidadesRestantes(combMult);
 				}
 				else mensaje("repeat");
-				modificarContador(unidadesExistentes.length);
 			}else{
 				$('#mult').removeAttr('title');
 				mensaje("default");
@@ -223,6 +228,7 @@
 	}
 		
 	function handleDropDiv(e){
+		if(centinelDiv >= MAX_UNITS) return false;
 		activarTooltip = centinelMensaje = false;
 		centinel = 0;
 		if(e.stopPropagation) e.stopPropagation();		
@@ -299,7 +305,6 @@
 					}					
 				}				
 			}
-			
 			else if(combMult.indexOf(element) != -1){				
 				combMult = combMult.replace(element,"");
 				$("#mult div."+element).first().remove();
@@ -309,8 +314,7 @@
 					combMult = diccionario[combMult];					
 					$('#mult').empty();
 					centinelMult = 0;
-					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");					
-					else addElementInColumn(combMult,"col2");										
+					addElementInColumn(combMult);
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
 				}
@@ -325,8 +329,7 @@
 				combDiv = diccionario[combDiv];
 				this.innerHTML = "";
 				centinelDiv = 0;
-				if(centinelColumnas == 0) addElementInColumn(combDiv,"col1");				
-				else addElementInColumn(combDiv,"col2");								
+				addElementInColumn(combDiv);
 				addElementOnArea(combDiv,'division');
 				activarTooltip = true;
 				centinel = 1;
@@ -339,8 +342,7 @@
 					$('#mult').empty();
 					this.innerHTML = "";
 					centinelMult = centinelDiv = 0;
-					if(centinelColumnas == 0) addElementInColumn(combMult,"col1");						
-					else addElementInColumn(combMult,"col2");											
+					addElementInColumn(combMult);
 					addElementOnArea(combMult,'mult');
 					activarTooltip = true;
 					superComb = '';
@@ -355,7 +357,6 @@
 				}
 				else
 					mensaje("repeat");
-				modificarContador(unidadesExistentes.length);
 			}else{
 				$('#mult').removeAttr('title');
 				$('#division').removeAttr('title');
@@ -372,17 +373,16 @@
 		this.style.opacity = '1';
 	}
 	
-	function addElementInColumn(texto,column){
+	function addElementInColumn(texto){
 		for(elemento in unidadesExistentes){
 			if(unidadesExistentes[elemento] == texto)
 				return false;			
 		}
 		centinelMensaje = true;
-		var columna = document.getElementById(column);
 		var unidad = document.createElement("div");
 		var label = document.createElement("label");		
 		var footer = document.createElement("footer");
-		unidad.setAttribute('class','column');		
+		unidad.setAttribute('class','unit');		
 		unidad.setAttribute('draggable','true');		
 		footer.innerHTML = texto;
 		if(texto == 'ohm'){
@@ -394,20 +394,17 @@
 		unidad.appendChild(footer);
 		setDragAndDropProp(unidad);
 		unidadesExistentes[unidadesExistentes.length] = texto;		
-		columna.appendChild(unidad);		
-		if(column == 'col1') centinelColumnas = 1;
-		else if(column == 'col2') centinelColumnas = 0;
+		document.querySelector("aside").appendChild(unidad);		
 	}	
 		
 	function addElementOnArea(texto, area){
-		if((area == 'mult') && (centinelMult >= 5)) return false;
-		if((area == 'mdivision') && (centinelDiv >= 5)) return false;
+		if((area == 'mult') && (centinelMult >= MAX_UNITS)) return false;
+		if((area == 'mdivision') && (centinelDiv >= MAX_UNITS)) return false;
 		var sector = document.getElementById(area);
 		var unidad = document.createElement("div");
 		var footer = document.createElement("footer");
 		var label = document.createElement("label");
-		unidad.setAttribute('class','column ' + texto);
-		unidad.setAttribute('id','ubicacion');
+		unidad.setAttribute('class','unit onarea ' + texto);
 		footer.innerHTML = texto;
 		if(texto == 'ohm'){
 			label.setAttribute('style','font-family:Symbol');
@@ -426,14 +423,15 @@
 			ruta.empty();		
 		var p = document.createElement("p");
 		if(unidad == 'default'){
-			p.setAttribute('style','color:gray;margin-left:2%;');
-			p.innerHTML = '<b>Combina</b> las unidades para crear muchas mas!';
+			p.setAttribute('style','color:gray;');
+			p.innerHTML = '&iexcl;<b>Combina</b> las unidades para crear muchas mas!';
 		}else if(unidad == 'repeat'){
-			p.setAttribute('style','color:#3E8EBB;margin-left:2%;');
-			p.innerHTML = '<b>Vaya!</b> Ya has creado esa unidad...';
+			p.setAttribute('style','color:#3E8EBB;');
+			p.innerHTML = '<b>&iexcl;Vaya!</b> Ya has creado esta unidad...';
 		}else{			
-			p.setAttribute('style','color:darkgreen;margin-left:2%;');
-			p.innerHTML = '<b>Enhorabuena!</b> Has creado una nueva unidad: <b>' + unidad + '</b>';
+			p.setAttribute('style','color:darkgreen;');
+			p.innerHTML = '<b>&iexcl;Enhorabuena!</b> Has creado: <b>' + unidad + '</b>';
+			$('#contadorUnidades').html(unidadesExistentes.length + '/17');
 		}		
 		ruta.append(p);
 		console.log(ruta);
@@ -451,16 +449,16 @@
 		$('#mult').html('');
 		$('#division').html('');
 		superComb = combMult = combDiv = subTmp = '';		 
-		centinel = centinelMult = centinelDiv = centinelColumnas = 0;				
+		centinel = centinelMult = centinelDiv = 0;				
 		if(unidadesExistentes.length != 4){
-			$('.column').remove();
+			$('.unit').remove();
 			unidadesExistentes = [];
-			addElementInColumn('metro',"col1");
-			addElementInColumn('kilogramo',"col1");
-			addElementInColumn('segundo',"col2");			
-			addElementInColumn('ampere',"col2");
+			addElementInColumn('metro');
+			addElementInColumn('kilogramo');
+			addElementInColumn('segundo');
+			addElementInColumn('ampere');
 		}
-		modificarContador(unidadesExistentes.length);
+		$('#contadorUnidades').html(unidadesExistentes.length + '/17');
 		mensaje("default");
 		reiniciarUnidadesRestantes();
     }	
@@ -490,10 +488,6 @@
 			$(tmp).trigger('stopRumble');
 			$(tmp).fadeOut('slow');			
 		},500);
-	}
-	
-	function modificarContador(contadorDeUnidades){		
-		$('contadorUnidades').html(contadorDeUnidades + "/17");
 	}
 	
 	function setDragAndDropProp(element){
@@ -551,8 +545,6 @@
 	function init(){
 		document.querySelector("#btnVaciar").addEventListener('click',limpiarPizarra,false);
 		document.querySelector("#btnReinicio").addEventListener('click',reset,false);
-		document.querySelector("#mensaje div").style.color = "gray";
-		document.querySelector("#mensaje div").style.marginLeft = "2%";		
 		getUnits();		
 	}
 	
