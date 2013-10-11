@@ -1,4 +1,8 @@
 
+html, body{
+	width: 100%;
+	height: 100%;
+}
 body{
 	background-image: url('../img/background.png');
 	background-size: 100% 100%;
@@ -42,6 +46,7 @@ header span{
 	top: 30%;
 	left: 8%;
 	text-align: left;
+	font-size: 1.5em;
 }
 #seccionDos h4{
 	font-family: "Arial Rounded MT Bold", Monaco, monospace;
@@ -66,29 +71,29 @@ header span{
 	left: 22%;		
 }
 #area{
-	border: 2px solid #666666;
 	width: 70%;
 	height: 70%;
 	margin-left: 12%;
 	margin-top: 7%;
 	position: absolute;
+	background-image: url(../img/board.png);
+	background-size: 100% 100%;
 }
 #mult, #division{
 	height: 50%;
 	width: 100%;		
-	background-color: white;
 	text-align: center;
 	display:table;
 }
 #mult{
-	background-image: url(../img/mult.png);
-	border-bottom: 2px solid rgb(80,80,80);
-	background-size: 100% 100%;
+	/*background-image: url(../img/mult.png);*/
+	border-bottom: 2px solid rgb(225,225,225);
+	/*background-size: 100% 100%;*/
 }
-#division{
+/*#division{
 	background-image: url(../img/div.png);
 	background-size: 100% 100%;
-}
+}*/
 	
 #seccionTres button{
 	padding: 5px 10px;
@@ -96,15 +101,23 @@ header span{
 	position: relative;
 	top: 82%;
 }			
-#seccionTres #btnVaciar{margin-right: 18%;}
-#seccionTres button:hover{background-color:gray;}
+#btnVaciar{
+	margin-right: 18%;
+	cursor: pointer;
+}
+#btnReinicio{cursor: pointer}
 
 aside{		
-	position: absolute;
+	position: initial;
 	height: 100%;
 	width: 20%;
-	right: 0;
+	margin-left: 80%;
 	background-color: RGB(74,110,169);
+	/*background-color: #fff; 
+	background-image: 
+	linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
+	linear-gradient(#eee .1em, transparent .1em);
+	background-size: 100% 1.2em;*/
 	text-align: center;
 	overflow-x: auto;
 }
@@ -125,18 +138,23 @@ footer{
 	margin-left: 5px;
 }
 #facebook{margin-left: 10px}
-#facebook img, #github img, #twitter img{width: auto; height: auto;}
+#facebook img, #github img, #twitter img{
+	width: auto; height: auto;
+}
 #facebook{
 	background-image: url(../img/facebook.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }
 #twitter{
 	background-image: url(../img/twitter.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }	
 #github{
 	background-image: url(../img/github.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }
 	
 [draggable]{
@@ -150,43 +168,33 @@ footer{
 	display: inline-block;
 	height: 75px;
 	width: 75px;
-	border: 1px solid #666666;
 	background-color: white;
 	color: black;
-	-webkit-box-shadow: inset 0 0 3px #000;		
-	box-shadow: inset 0 0 3px #000;
-	text-align: center;		
+	text-align: center;
 	cursor: pointer;
 	margin-right: 10px;
 	margin-left: 10px;
 	margin-top: 15px;
+	z-index: 100;
+	border-radius: 40px;
+	border: 1px solid rgb(80,80,80);
 }
 .unit label{
 	display: inline-block;
 	text-shadow: #000 0 1px;
-	height: 58px;
-	font-size: 2.6em;
+	height: 55px;
+	font-size: 2.4em;
 	cursor: pointer;
+	margin-top: 5px;
 }
 .unit footer{
 	position: relative;
-	font-size: 0.8em;
-	line-height: 20px;
-	color: #fff;
-	text-shadow: #000 0 1px;
-	box-shadow: 5px;
+	font-size: 0.7em;
 	padding: 1px;
 	height: 20px;
-	background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-	background: -webkit-gradient(linear, left bottom, right bottom,
-								color-stop(0, rgb(0,0,0)),
-								color-stop(0.50, rgb(79,79,79)),
-								color-stop(1, rgb(21,21,21)));
-	background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-	background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));				
+	margin-top: -5px;
 }
 .unit.over{border: 2px dashed #000}
-.onarea{margin-top: 50px}
 
 @media only screen and (max-width : 540px){
 	body{
@@ -199,15 +207,20 @@ footer{
 		display: block;
 		height: auto;
 	}
+	header span{
+		float: right;
+		padding: 10px;
+	}
 	aside{
 		position: initial;
 		display: inline-block;
+		margin-left: 0;
 		width: 100%;
-		height: 77px;
+		height: auto;
         overflow-x: auto;
 		overflow-y: hidden;
         vertical-align: middle;
-		margin-top: 20px;
+		margin-top: 10px;
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
@@ -232,10 +245,18 @@ footer{
 		width: 70%;
 		height: 300px;
 	}
+	#seccionTres button{
+		position: initial;
+		display: inline-block;
+		float: right;
+		top: 82%;
+	}			
+	#seccionTres #btnVaciar{margin-right: 18%;}
 	footer{
 		position: initial;
 		display: block;
 		text-align: center;
-		margin-bottom: 20px;
+		padding-top: 10px;
+		padding-bottom: 30px;
 	}
 }

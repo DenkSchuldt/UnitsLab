@@ -1,24 +1,26 @@
 
 	/* DECLARACIONES DE VARIABLES*/
 	
-	var cols = document.querySelectorAll('aside .unit'),
-		mult = document.getElementById('mult'),
-		div  = document.getElementById('division'),
+	var units = document.querySelectorAll('aside .unit'),
 		unidadesExistentes      = ['metro','kilogramo','segundo','ampere'],
 		unidadesRestantesStatic = ['metro2','metro3','hertz','newton','joule','watt','coulomb','volt','ohm','farad','weber','tesla','henry'],
 		unidadesRestantes       = unidadesRestantesStatic.slice(0,unidadesRestantesStatic.length),
-		dragSrcEl        = null,
 		superComb        = '',
 		combMult         = '',
 		combDiv          = '',
 		centinel         = 0,
-		centinelMult     = 0,
-		centinelDiv      = 0,
 		activarTooltip   = false,
 		centinelMensaje  = false,
 		WIDTH = 0,
 		HEIGHT = 0,
-		MAX_UNITS = 0,
+		MULT_LEFT = 0,
+		MULT_RIGHT = 0,
+		MULT_BOTTOM = 0,
+		MULT_TOP = 0,
+		DIV_LEFT = 0,
+		DIV_RIGHT = 0,
+		DIV_BOTTOM = 0,
+		DIV_TOP = 0,
 		tooltips = {
 			'metro2' : 'm*m',
 			'metro3' : 'm^2*m',
@@ -54,373 +56,329 @@
 			'henry'    : 'H'
 		};		
 	
-	
-	/* IMPLEMENTACIONES DE FUNCIONES */	
-	
-	function handleDragStart(e){
-		dragSrcEl = this;
-		e.dataTransfer.effectAllowed = 'move';
-		e.dataTransfer.setData('text/html', this.innerHTML);
-		var unit_width, unit_height;
-		WIDTH = document.querySelector('#mult').offsetWidth;
-		HEIGHT = document.querySelector('#mult').offsetHeight;
-		unit_width = document.querySelector('.unit').offsetWidth + 20;
-		if(WIDTH < (unit_width * 6)) MAX_UNITS = 5;
-		if(WIDTH < (unit_width * 5)) MAX_UNITS = 4;
-		if(WIDTH < (unit_width * 4)) MAX_UNITS = 3;
-		if(WIDTH < (unit_width * 3)) MAX_UNITS = 2;
-		if(WIDTH < (unit_width * 2)) MAX_UNITS = 1;
-		console.log("Ancho del area: " + WIDTH);
-		console.log("Ancho de unidad: " + unit_width);
-	}
-	
-	function handleDragOver(e){
-		if (e.preventDefault){
-			e.preventDefault();
-		}
-		e.dataTransfer.dropEffect = 'move';
-		return false;
-	}
-	
-	function handleDragEnter(e){
-		this.classList.add('over');
-	}
-
-	function handleDragLeave(e){
-		this.classList.remove('over');
-	}
-
-	function handleDrop(e){
-		if (e.stopPropagation){
-			e.stopPropagation();
-		}
-		if (dragSrcEl != this){
-			dragSrcEl.innerHTML = this.innerHTML;
-			this.innerHTML = e.dataTransfer.getData('text/html');
-		}
-		return false;
-	}
-
-	function handleDropMult(e){
-		if(centinelMult >= MAX_UNITS) return false;
-		activarTooltip = centinelMensaje = false;
+	function checkMult(elem){
 		centinel = 0;
-		if (e.stopPropagation) e.stopPropagation();		
-		if (dragSrcEl != this){
-			var element = $(e.dataTransfer.getData('text/html')).next().text();
-			if(element.indexOf("metro") != -1){
-				if(element.indexOf("metro3") != -1){
-					if(combDiv.indexOf('metro3') != -1){
-						$("#division div.metro3").first().remove();
-						combDiv = combDiv.replace("metro3","");
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro2') != -1){
-						$("#division div.metro2").first().remove();
-						combDiv = combDiv.replace("metro2","");
-						combMult = combMult + "metro";
-						addElementOnArea("metro",'mult');
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro') != -1){
-						$("#division div.metro").first().remove();
-						combDiv = combDiv.replace("metro","");
-						combMult = combMult + "metro2";
-						addElementOnArea("metro2",'mult');
-						centinelDiv--;
-						centinel = 1;
-					}					
+		activarTooltip = centinelMensaje = false;
+		var element = elem.target.childNodes[1].innerHTML;
+		if(elem.target.mult) return;
+		if(elem.target.div){
+			elem.target.div = false;
+			combDiv = combDiv.replace(element,"");
+		}
+		if(element.indexOf("metro") != -1){
+			if(element.indexOf("metro3") != -1){
+				if(combDiv.indexOf('metro3') != -1){
+					$(".unit.div.metro3").first().remove();
+					combDiv = combDiv.replace("metro3","");
+					$(elem.target).remove();
+					centinel = 1;
 				}
-				else if(element.indexOf("metro2") != -1){
-					if(combDiv.indexOf('metro3') != -1){
-						$("#division div.metro3").first().remove();
-						combDiv = combDiv.replace("metro3","metro");
-						addElementOnArea('metro','division');
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro2') != -1){
-						$("#division div.metro2").first().remove();
-						combDiv = combDiv.replace("metro2","");
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro') != -1){
-						$("#division div.metro").first().remove();
-						combDiv = combDiv.replace("metro","");
-						combMult = combMult + "metro";
-						addElementOnArea("metro",'mult');
-						centinelDiv--;
-						centinel = 1;
-					}					
+				else if(combDiv.indexOf('metro2') != -1){
+					$(".unit.div.metro2").first().remove();
+					combDiv = combDiv.replace("metro2","");
+					combMult = combMult + "metro";
+					addUnitInArea("metro",'mult');
+					$(elem.target).remove();
+					centinel = 1;
 				}
-				else if(element == 'metro'){
-					if(combDiv.indexOf('metro3') != -1){
-						$("#division div.metro3").first().remove();
-						combDiv = combDiv.replace("metro3","metro2");
-						addElementOnArea('metro2','division');
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro2') != -1){
-						$("#division div.metro2").first().remove();
-						combDiv = combDiv.replace("metro2","metro");
-						addElementOnArea('metro','division');
-						centinelDiv--;
-						centinel = 1;
-					}
-					else if(combDiv.indexOf('metro') != -1){
-						$("#division div.metro").first().remove();
-						combDiv = combDiv.replace("metro","");
-						centinelDiv--;
-						centinel = 1;
-					}					
-				}				
-			}			
-			else if(combDiv.indexOf(element) != -1){				
-				combDiv = combDiv.replace(element,"");
-				$("#division div."+element).first().remove();
-				centinelDiv--;
-				centinel = 1;
+				else if(combDiv.indexOf('metro') != -1){
+					$(".unit.div.metro").first().remove();
+					combDiv = combDiv.replace("metro","");
+					combMult = combMult + "metro2";
+					addUnitInArea("metro2",'mult');
+					$(elem.target).remove();
+					centinel = 1;
+				}					
 			}
-			if(centinel == 0){
-				if(centinelMult < 5) combMult = combMult + element;
-				addElementOnArea(element,'mult');
+			else if(element.indexOf("metro2") != -1){
+				if(combDiv.indexOf('metro3') != -1){
+					$(".unit.div.metro3").first().remove();
+					combDiv = combDiv.replace("metro3","metro");
+					addUnitInArea('metro','div');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combDiv.indexOf('metro2') != -1){
+					$(".unit.div.metro2").first().remove();
+					combDiv = combDiv.replace("metro2","");
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combDiv.indexOf('metro') != -1){
+					$(".unit.div.metro").first().remove();
+					combDiv = combDiv.replace("metro","");
+					combMult = combMult + "metro";
+					addUnitInArea("metro",'mult');
+					$(elem.target).remove();
+					centinel = 1;
+				}					
 			}
-			centinel = 0;
+			else if(element == 'metro'){
+				if(combDiv.indexOf('metro3') != -1){
+					$(".unit.div.metro3").first().remove();
+					combDiv = combDiv.replace("metro3","metro2");
+					addUnitInArea('metro2','div');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combDiv.indexOf('metro2') != -1){
+					$(".unit.div.metro2").first().remove();
+					combDiv = combDiv.replace("metro2","metro");
+					addUnitInArea('metro','div');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combDiv.indexOf('metro') != -1){
+					$(".unit.div.metro").first().remove();
+					combDiv = combDiv.replace("metro","");
+					$(elem.target).remove();
+					centinel = 1;
+				}					
+			}				
+		}			
+		else if(combDiv.indexOf(element) != -1){				
+			combDiv = combDiv.replace(element,"");
+			$(".unit.div."+element).first().remove();
+			$(elem.target).remove();
+			centinel = 1;
+		}
+		if(centinel == 0){
+			combMult = combMult + element;
+			elem.target.mult = true;
+		}
+		centinel = 0;
+		if(diccionario[combMult]){
+			combMult = diccionario[combMult];
+			$(".unit.mult").remove();
+			addUnitInColumn(combMult,true,"");
+			addUnitInArea(combMult,'mult');
+			activarTooltip = true;
+			centinel = 1;
+		}
+		superComb = combMult + '/' + combDiv;
+		if(centinel == 0){
+			if(diccionario[superComb]){
+				combMult = diccionario[superComb];
+				$(".unit.mult").remove();
+				$('.unit.div').remove();
+				addUnitInColumn(combMult,true,"");
+				addUnitInArea(combMult,'mult');
+				activarTooltip = true;
+				superComb = combDiv = '';
+			}
+		}
+		if(activarTooltip){
+			if(centinelMensaje){
+				mensaje(combMult);
+				modificarUnidadesRestantes(combMult);
+			}
+			else mensaje("repeat");
+		}else{
+			mensaje("default");
+		}
+		elem.target.mult = true;
+	}
+	
+	function checkDiv(elem){
+		centinel = 0;
+		activarTooltip = centinelMensaje = false;
+		var element = elem.target.childNodes[1].innerHTML;
+		if(elem.target.div) return;
+		if(elem.target.mult){
+			elem.target.mult = false;
+			combMult = combMult.replace(element,"");
+		}
+		if(element.indexOf("metro") != -1){
+			if(element.indexOf("metro3") != -1){
+				if(combMult.indexOf('metro3') != -1){
+					$(".unit.mult.metro3").first().remove();
+					combMult = combMult.replace("metro3","");
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro2') != -1){
+					$(".unit.mult.metro2").first().remove();
+					combMult = combMult.replace("metro2","");
+					combDiv = combDiv + "metro";
+					addUnitInArea("metro",'div');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro') != -1){
+					$(".unit.mult.metro").first().remove();
+					combMult = combMult.replace("metro","");
+					combDiv = combDiv + "metro2";
+					addUnitInArea("metro2",'div');
+					$(elem.target).remove();
+					centinel = 1;
+				}					
+			}
+			else if(element.indexOf("metro2") != -1){
+				if(combMult.indexOf('metro3') != -1){
+					$(".unit.mult.metro3").first().remove();
+					combMult = combMult.replace("metro3","metro");
+					addUnitInArea('metro','mult');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro2') != -1){
+					$(".unit.mult.metro2").first().remove();
+					combMult = combMult.replace("metro2","");
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro') != -1){
+					$(".unit.mult.metro").first().remove();
+					combMult = combMult.replace("metro","");
+					combDiv = combDiv + "metro";
+					addUnitInArea("metro",'div');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+			}
+			else if(element == 'metro'){
+				if(combMult.indexOf('metro3') != -1){
+					$(".unit.mult.metro3").first().remove();
+					combMult = combMult.replace("metro3","metro2");
+					addUnitInArea('metro2','mult');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro2') != -1){
+					$(".unit.mult.metro2").first().remove();
+					combMult = combMult.replace("metro2","metro");
+					addUnitInArea('metro','mult');
+					$(elem.target).remove();
+					centinel = 1;
+				}
+				else if(combMult.indexOf('metro') != -1){
+					$(".unit.mult.metro").first().remove();
+					combMult = combMult.replace("metro","");
+					$(elem.target).remove();
+					centinel = 1;
+				}					
+			}
+		}
+		else if(combMult.indexOf(element) != -1){				
+			combMult = combMult.replace(element,"");
+			$(".unit.mult."+element).first().remove();
+			$(elem.target).remove();
+			centinel = 1;
 			if(diccionario[combMult]){
-				combMult = diccionario[combMult];				
-				this.innerHTML = "";
-				centinelMult = 0;
-				addElementInColumn(combMult);
-				addElementOnArea(combMult,'mult');
+				combMult = diccionario[combMult];
+				$('.unit.mult').remove();
+				$('.unit.div').remove();
+				addUnitInColumn(combMult,true,"");
+				addUnitInArea(combMult,'mult');
 				activarTooltip = true;
-				centinel = 1;
-			}
-			superComb = combMult + '/' + combDiv;
-			if(centinel == 0){				
-				if(diccionario[superComb]){
-					combMult = diccionario[superComb];
-					this.innerHTML = "";
-					centinelMult = 0;
-					$('#division').empty();
-					addElementInColumn(combMult);
-					addElementOnArea(combMult,'mult');
-					activarTooltip = true;
-					superComb = combDiv = '';
-				}
-			}
-			if(activarTooltip){
-				$('#mult').attr('title',tooltips[combMult]);
-				if(centinelMensaje){
-					mensaje(combMult);
-					modificarUnidadesRestantes(combMult);
-				}
-				else mensaje("repeat");
-			}else{
-				$('#mult').removeAttr('title');
-				mensaje("default");
-			}
-		}		
-		return false;
-	}
-		
-	function handleDropDiv(e){
-		if(centinelDiv >= MAX_UNITS) return false;
-		activarTooltip = centinelMensaje = false;
-		centinel = 0;
-		if(e.stopPropagation) e.stopPropagation();		
-		if(dragSrcEl != this){
-			var element = $(e.dataTransfer.getData('text/html')).next().text();			
-			if(element.indexOf("metro") != -1){
-				if(element.indexOf("metro3") != -1){
-					if(combMult.indexOf('metro3') != -1){
-						$("#mult div.metro3").first().remove();
-						combMult = combMult.replace("metro3","");
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro2') != -1){
-						$("#mult div.metro2").first().remove();
-						combMult = combMult.replace("metro2","");
-						combDiv = combDiv + "metro";
-						addElementOnArea("metro",'division');
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro') != -1){
-						$("#mult div.metro").first().remove();
-						combMult = combMult.replace("metro","");
-						combDiv = combDiv + "metro2";
-						addElementOnArea("metro2",'division');
-						centinelMult--;
-						centinel = 1;
-					}					
-				}
-				else if(element.indexOf("metro2") != -1){
-					if(combMult.indexOf('metro3') != -1){
-						$("#mult div.metro3").first().remove();
-						combMult = combMult.replace("metro3","metro");
-						addElementOnArea('metro','mult');
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro2') != -1){
-						$("#mult div.metro2").first().remove();
-						combMult = combMult.replace("metro2","");
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro') != -1){
-						$("#mult div.metro").first().remove();
-						combMult = combMult.replace("metro","");
-						combDiv = combDiv + "metro";
-						addElementOnArea("metro",'division');
-						centinelMult--;
-						centinel = 1;
-					}					
-				}
-				else if(element == 'metro'){
-					if(combMult.indexOf('metro3') != -1){
-						$("#mult div.metro3").first().remove();
-						combMult = combMult.replace("metro3","metro2");
-						addElementOnArea('metro2','mult');
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro2') != -1){
-						$("#mult div.metro2").first().remove();
-						combMult = combMult.replace("metro2","metro");
-						addElementOnArea('metro','mult');
-						centinelMult--;
-						centinel = 1;
-					}
-					else if(combMult.indexOf('metro') != -1){
-						$("#mult div.metro").first().remove();
-						combMult = combMult.replace("metro","");
-						centinelMult--;
-						centinel = 1;
-					}					
-				}				
-			}
-			else if(combMult.indexOf(element) != -1){				
-				combMult = combMult.replace(element,"");
-				$("#mult div."+element).first().remove();
-				centinelMult--;
-				centinel = 1;
-				if(diccionario[combMult]){
-					combMult = diccionario[combMult];					
-					$('#mult').empty();
-					centinelMult = 0;
-					addElementInColumn(combMult);
-					addElementOnArea(combMult,'mult');
-					activarTooltip = true;
-				}
-			}
-			if(centinel == 0){
-				if(centinelDiv < 5)
-					combDiv = combDiv + element;
-				addElementOnArea(element,'division');
-			}
-			centinel = 0;
-			if(diccionario[combDiv]){
-				combDiv = diccionario[combDiv];
-				this.innerHTML = "";
-				centinelDiv = 0;
-				addElementInColumn(combDiv);
-				addElementOnArea(combDiv,'division');
-				activarTooltip = true;
-				centinel = 1;
-			}
-			superComb = combMult + '/' + combDiv;
-			if(centinel == 0){
-				if(diccionario[superComb]){
-					combMult = diccionario[superComb];
-					combDiv = '';
-					$('#mult').empty();
-					this.innerHTML = "";
-					centinelMult = centinelDiv = 0;
-					addElementInColumn(combMult);
-					addElementOnArea(combMult,'mult');
-					activarTooltip = true;
-					superComb = '';
-				}
-			}
-			if(activarTooltip){
-				if(combMult != "") $('#mult').attr('title',tooltips[combMult]);								
-				else if(combDiv != "") $('#division').attr('title',tooltips[combMult]);
-				if(centinelMensaje){
-					mensaje(combMult);
-					modificarUnidadesRestantes(combMult);
-				}
-				else
-					mensaje("repeat");
-			}else{
-				$('#mult').removeAttr('title');
-				$('#division').removeAttr('title');
-				mensaje("default");
 			}
 		}
-		return false;
+		if(centinel == 0){
+			combDiv = combDiv + element;
+			elem.target.div = true;
+		}
+		centinel = 0;
+		if(diccionario[combDiv]){
+			combDiv = diccionario[combDiv];
+			$(".unit.div").remove();
+			addUnitInColumn(combDiv,true,"");
+			addUnitInArea(combDiv,'div');
+			activarTooltip = true;
+			centinel = 1;
+		}
+		superComb = combMult + '/' + combDiv;
+		if(centinel == 0){
+			if(diccionario[superComb]){
+				combMult = diccionario[superComb];
+				combDiv = '';
+				$('.unit.mult').remove();
+				$(".unit.div").remove();
+				addUnitInColumn(combMult,true,"");
+				addUnitInArea(combMult,'mult');
+				activarTooltip = true;
+				superComb = '';
+			}
+		}
+		if(activarTooltip){
+			if(centinelMensaje){
+				mensaje(combMult);
+				modificarUnidadesRestantes(combMult);
+			}
+			else
+				mensaje("repeat");
+		}else{
+			mensaje("default");
+		}
+		elem.target.div = true;
 	}
 	
-	function handleDragEnd(e){
-		[].forEach.call(cols, function (col){
-			col.classList.remove('over');
-		});
-		this.style.opacity = '1';
-	}
-	
-	function addElementInColumn(texto){
-		for(elemento in unidadesExistentes){
-			if(unidadesExistentes[elemento] == texto)
+	function addUnitInColumn(text){
+		for(element in unidadesExistentes){
+			if(unidadesExistentes[element] == text)
 				return false;			
 		}
 		centinelMensaje = true;
-		var unidad = document.createElement("div");
-		var label = document.createElement("label");		
-		var footer = document.createElement("footer");
-		unidad.setAttribute('class','unit');		
-		unidad.setAttribute('draggable','true');		
-		footer.innerHTML = texto;
-		if(texto == 'ohm'){
-			label.setAttribute('style','font-family:Symbol');
-			label.innerHTML = 'w';
-		}else
-			label.innerHTML = simbolos[texto];
-		unidad.appendChild(label);		
-		unidad.appendChild(footer);
-		setDragAndDropProp(unidad);
-		unidadesExistentes[unidadesExistentes.length] = texto;		
-		document.querySelector("aside").appendChild(unidad);		
+		var unit = createUnit(text,true,"");
+		console.log(unit);
+		unidadesExistentes[unidadesExistentes.length] = text;
+		document.querySelector("aside").appendChild(unit);
+		$(unit).css("top",$(unit).offset().top);
+		$(unit).css("left",$(unit).offset().left);
 	}	
 		
-	function addElementOnArea(texto, area){
-		if((area == 'mult') && (centinelMult >= MAX_UNITS)) return false;
-		if((area == 'mdivision') && (centinelDiv >= MAX_UNITS)) return false;
-		var sector = document.getElementById(area);
-		var unidad = document.createElement("div");
+	function addUnitInArea(text, area){
+		var allUnits = $(".unit");
+		for(var i=0; i<allUnits.length; i++){
+			if($(allUnits[i]).hasClass(area)){
+				$(allUnits[i]).remove();
+			}
+		}
+		var unit = createUnit(text,false,area);
+		document.querySelector("aside").appendChild(unit);
+		unit.inside = true;
+		if(area == "mult"){
+			$(unit).css("left",MULT_LEFT+WIDTH-250);
+			$(unit).css("top",MULT_TOP+HEIGHT-130);
+		}else if(area == "div"){
+			$(unit).css("left",DIV_LEFT+WIDTH-250);
+			$(unit).css("top",DIV_TOP+HEIGHT-130);
+		}
+	}
+	
+	function createUnit(text,_super,area){
+		var unit = document.createElement("div");
+		var label = document.createElement("label");		
 		var footer = document.createElement("footer");
-		var label = document.createElement("label");
-		unidad.setAttribute('class','unit onarea ' + texto);
-		footer.innerHTML = texto;
-		if(texto == 'ohm'){
+		footer.innerHTML = text;
+		if(text == 'ohm'){
 			label.setAttribute('style','font-family:Symbol');
 			label.innerHTML = 'w';
 		}else
-			label.innerHTML = simbolos[texto];
-		unidad.appendChild(label);
-		unidad.appendChild(footer);		
-		sector.appendChild(unidad);
-		if(area == 'mult') centinelMult++;
-		if(area == 'division') centinelDiv++;
+			label.innerHTML = simbolos[text];
+		unit.appendChild(label);	
+		unit.appendChild(footer);
+		$(unit).udraggable({
+			start: function ($element, dragging, x, y) {
+				recursiveUdrag($element, dragging, x, y);
+			},
+			stop: function ($elem, dragging, x, y){
+				checkUnitOnArea($elem);
+			}
+		});
+		if(_super){
+			$(unit).attr('class','unit super');
+			$(unit).css("position","initial");
+		}
+		else $(unit).attr('class','unit ' + area + ' ' + text);
+		if(area == "mult") unit.mult = true;
+		if(area == "div") unit.div = true;
+		return unit;
 	}
 	
+	
 	function mensaje(unidad){
-		var ruta = $("#mensaje");
-			ruta.empty();		
+		var msj = $("#mensaje");
+			msj.empty();		
 		var p = document.createElement("p");
 		if(unidad == 'default'){
 			p.setAttribute('style','color:gray;');
@@ -433,34 +391,23 @@
 			p.innerHTML = '<b>&iexcl;Enhorabuena!</b> Has creado: <b>' + unidad + '</b>';
 			$('#contadorUnidades').html(unidadesExistentes.length + '/17');
 		}		
-		ruta.append(p);
-		console.log(ruta);
+		msj.append(p);
 	}
 	
 	function limpiarPizarra(){
-		$('#mult').html('');
-		$('#division').html('');		
-		centinelMult = centinelDiv = 0;
+		var allUnits = $(".unit");
+		for(var i=0; i<allUnits.length; i++){
+			if(!$(allUnits[i]).hasClass("super")){
+				$(allUnits[i]).remove();
+			}
+		}
+		centinelDiv = 0;
 		superComb = combMult = combDiv = '';
 		mensaje("default");
 	}
 		
 	function reset(){
-		$('#mult').html('');
-		$('#division').html('');
-		superComb = combMult = combDiv = subTmp = '';		 
-		centinel = centinelMult = centinelDiv = 0;				
-		if(unidadesExistentes.length != 4){
-			$('.unit').remove();
-			unidadesExistentes = [];
-			addElementInColumn('metro');
-			addElementInColumn('kilogramo');
-			addElementInColumn('segundo');
-			addElementInColumn('ampere');
-		}
-		$('#contadorUnidades').html(unidadesExistentes.length + '/17');
-		mensaje("default");
-		reiniciarUnidadesRestantes();
+		location.reload();
     }	
 	
 	function reiniciarUnidadesRestantes(){
@@ -490,15 +437,6 @@
 		},500);
 	}
 	
-	function setDragAndDropProp(element){
-		element.addEventListener('dragstart', handleDragStart, false);
-		element.addEventListener('dragenter', handleDragEnter, false)
-		element.addEventListener('dragover', handleDragOver, false);
-		element.addEventListener('dragleave', handleDragLeave, false);
-		element.addEventListener('drop', handleDrop, false);
-		element.addEventListener('dragend', handleDragEnd, false);
-	}
-	
 	function getUnits(){
 		$.ajax({
 			dataType: "json",
@@ -507,29 +445,9 @@
 			type: "GET",
 			success: function(respuesta){				
 				diccionario = respuesta;
-				console.log(respuesta);
 			}
 		});
 	}
-	
-	[].forEach.call(cols, function(col){
-		setDragAndDropProp(col);
-	});
-			
-	mult.addEventListener('drop', handleDropMult, false);
-	mult.addEventListener('dragstart', handleDragStart, false);
-	mult.addEventListener('dragenter', handleDragEnter, false)
-	mult.addEventListener('dragover', handleDragOver, false);
-	mult.addEventListener('dragleave', handleDragLeave, false);		
-	mult.addEventListener('dragend', handleDragEnd, false);
-	
-	div.addEventListener('drop', handleDropDiv, false);
-	div.addEventListener('dragstart', handleDragStart, false);
-	div.addEventListener('dragenter', handleDragEnter, false)
-	div.addEventListener('dragover', handleDragOver, false);
-	div.addEventListener('dragleave', handleDragLeave, false);		
-	div.addEventListener('dragend', handleDragEnd, false);
-	
 	
 	function getOffset(el){
 		var _x = 0;
@@ -542,11 +460,95 @@
 		return { top: _y, left: _x };
 	}
 	
+	function setBordersOfAreas(){
+		WIDTH = document.querySelector('#mult').offsetWidth;
+		HEIGHT = document.querySelector('#mult').offsetHeight;
+		MULT_LEFT = getOffset(document.querySelector('#mult')).left;
+		MULT_RIGHT = MULT_LEFT + WIDTH;
+		MULT_BOTTOM = getOffset(document.querySelector('#mult')).top + HEIGHT;
+		MULT_TOP = MULT_BOTTOM - HEIGHT;
+		DIV_LEFT = getOffset(document.querySelector('#division')).left;
+		DIV_RIGHT = DIV_LEFT + WIDTH;
+		DIV_BOTTOM = getOffset(document.querySelector('#division')).top + HEIGHT;
+		DIV_TOP = DIV_BOTTOM - HEIGHT;
+	}
+	
+	function recursiveUdrag(elem, drag, x, y){
+		setBordersOfAreas();
+		if($(elem.target).hasClass("super")){
+			var node = elem.target.cloneNode(true);
+			$(node).udraggable({
+				start: function ($element, dragging, x, y) {
+					recursiveUdrag($element, dragging, x, y);
+				},
+				stop: function ($elem, dragging, x, y){
+					checkUnitOnArea($elem);
+					console.log("supercomb: " + superComb);
+					console.log("combMult: " + combMult);
+					console.log("combDiv: " + combDiv);
+				}
+			});
+			node.style.position = "initial";
+			$(elem.target).after(node);
+			$(node).css("top",elem.target.style.top);
+			$(node).css("left",elem.target.style.left);
+			$(elem.target).removeClass("super");
+		}
+		elem.target.style.position = "absolute";
+	}
+	
+	function checkUnitOnArea(elem){
+		if(elem.target.offsetLeft >= MULT_LEFT && elem.target.offsetLeft <= MULT_RIGHT-77){
+			if(elem.target.offsetTop >= MULT_TOP && elem.target.offsetTop <= MULT_BOTTOM-77){
+				$(elem.target).attr("class","unit mult "+elem.target.childNodes[1].innerHTML);
+				checkMult(elem);
+			}else if(elem.target.offsetTop >= DIV_TOP && elem.target.offsetTop <= DIV_BOTTOM-77){
+				$(elem.target).attr("class","unit div "+elem.target.childNodes[1].innerHTML);
+				checkDiv(elem);
+			}else{
+				$(elem.target).attr("class","unit");
+			}
+		}else{
+			if(elem.target.mult){
+				elem.target.mult = false;
+				combMult = combMult.replace(elem.target.childNodes[1].innerHTML,"");
+			}
+			if(elem.target.div){
+				elem.target.div = false;
+				combDiv = combDiv.replace(elem.target.childNodes[1].innerHTML,"");
+			}
+			$(elem.target).attr("class","unit");
+		}
+	}
+	
+	function setInitialOffsets(){
+		$($('.unit')[0]).css("top",$($('.unit')[0]).offset().top);
+		$($('.unit')[0]).css("left",$($('.unit')[0]).offset().left);
+		$($('.unit')[1]).css("top",$($('.unit')[1]).offset().top);
+		$($('.unit')[1]).css("left",$($('.unit')[1]).offset().left);
+		$($('.unit')[2]).css("top",$($('.unit')[2]).offset().top);
+		$($('.unit')[2]).css("left",$($('.unit')[2]).offset().left);
+		$($('.unit')[3]).css("top",$($('.unit')[3]).offset().top);
+		$($('.unit')[3]).css("left",$($('.unit')[3]).offset().left);
+	}
+	
 	function init(){
 		document.querySelector("#btnVaciar").addEventListener('click',limpiarPizarra,false);
 		document.querySelector("#btnReinicio").addEventListener('click',reset,false);
-		getUnits();		
+		getUnits();
+		$('.unit.super').udraggable({
+			start: function ($element, dragging, x, y) {
+				recursiveUdrag($element, dragging, x, y);
+			},
+			stop: function ($elem, dragging, x, y){
+				checkUnitOnArea($elem);
+				console.log("supercomb: " + superComb);
+				console.log("combMult: " + combMult);
+				console.log("combDiv: " + combDiv);
+			}
+		});
+		$('.unit.super').css("position","initial");
+		setInitialOffsets();
 	}
 	
 	window.onload = init();
-	
