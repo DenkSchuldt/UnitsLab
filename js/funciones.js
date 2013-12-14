@@ -136,18 +136,21 @@
 				}					
 			}				
 		}			
-		else if(combDiv.indexOf(element) != -1){				
+		else if(combDiv.indexOf(element) != -1){
+			//Para simplificar una unidad
 			combDiv = combDiv.replace(element,"");
 			$(".unit.div."+element).first().remove();
 			$(elem.target).remove();
 			centinel = 1;
 		}
 		if(centinel == 0){
+			//Si no hay combinación o simplificación, añado la unidad al area
 			combMult = combMult + element;
 			elem.target.mult = true;
 		}
 		centinel = 0;
 		if(diccionario[combMult]){
+			//Si la combinación existe, esta es añadida al area y a la barra de unidades disponibles
 			combMult = diccionario[combMult];
 			$(".unit.mult").remove();
 			addUnitInColumn(combMult,true,"");
@@ -158,6 +161,7 @@
 		superComb = combMult + '/' + combDiv;
 		if(centinel == 0){
 			if(diccionario[superComb]){
+				//Si la super combinación existe, esta es añadida al area y a la barra de unidades disponibles
 				combMult = diccionario[superComb];
 				$(".unit.mult").remove();
 				$('.unit.div').remove();
@@ -177,6 +181,8 @@
 			mensaje("default");
 		}
 		elem.target.mult = true;
+		console.log("CombMult es: " + combMult);
+		console.log("CombDiv es: " + combDiv);
 	}
 	
 	function checkDiv(elem){
@@ -310,6 +316,8 @@
 			mensaje("default");
 		}
 		elem.target.div = true;
+		console.log("CombMult es: " + combMult);
+		console.log("CombDiv es: " + combDiv);
 	}
 	
 	function addUnitInColumn(text){
@@ -319,7 +327,6 @@
 		}
 		centinelMensaje = true;
 		var unit = createUnit(text,true,"");
-		console.log(unit);
 		unidadesExistentes[unidadesExistentes.length] = text;
 		document.querySelector("aside").appendChild(unit);
 		$(unit).css("top",$(unit).offset().top);
@@ -398,7 +405,9 @@
 		var allUnits = $(".unit");
 		for(var i=0; i<allUnits.length; i++){
 			if(!$(allUnits[i]).hasClass("super")){
-				$(allUnits[i]).remove();
+				$(allUnits[i]).fadeOut('fast',function(){
+					$(allUnits[i]).remove();
+				});
 			}
 		}
 		centinelDiv = 0;
@@ -474,7 +483,6 @@
 	}
 	
 	function recursiveUdrag(elem, drag, x, y){
-		setBordersOfAreas();
 		if($(elem.target).hasClass("super")){
 			var node = elem.target.cloneNode(true);
 			$(node).udraggable({
@@ -483,9 +491,6 @@
 				},
 				stop: function ($elem, dragging, x, y){
 					checkUnitOnArea($elem);
-					console.log("supercomb: " + superComb);
-					console.log("combMult: " + combMult);
-					console.log("combDiv: " + combDiv);
 				}
 			});
 			node.style.position = "initial";
@@ -507,6 +512,15 @@
 				checkDiv(elem);
 			}else{
 				$(elem.target).attr("class","unit");
+				console.log(elem.target.childNodes[1].innerHTML);
+				if(elem.target.div){
+					elem.target.div = false;
+					combDiv = combDiv.replace(elem.target.childNodes[1].innerHTML,"");
+				}
+				if(elem.target.mult){
+					elem.target.mult = false;
+					combMult = combMult.replace(elem.target.childNodes[1].innerHTML,"");
+				}
 			}
 		}else{
 			if(elem.target.mult){
@@ -542,13 +556,11 @@
 			},
 			stop: function ($elem, dragging, x, y){
 				checkUnitOnArea($elem);
-				console.log("supercomb: " + superComb);
-				console.log("combMult: " + combMult);
-				console.log("combDiv: " + combDiv);
 			}
 		});
 		$('.unit.super').css("position","initial");
 		setInitialOffsets();
+		setInterval(setBordersOfAreas,1000);
 	}
 	
 	window.onload = init();

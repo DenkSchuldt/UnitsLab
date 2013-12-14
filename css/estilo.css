@@ -31,6 +31,7 @@ header h5{
 	padding-top: 10px;
 	padding-bottom: 10px;
 	font-size: 1.2em;
+	color: gray;
 }
 header span{	
 	width: auto;
@@ -42,11 +43,11 @@ header span{
 #seccionDos{		
 	position: absolute;
 	height: auto;
-	width: 15%;
+	width: 12%;
 	top: 30%;
-	left: 8%;
+	left: 2%;
 	text-align: left;
-	font-size: 1.5em;
+	font-size: 1em;
 }
 #seccionDos h4{
 	font-family: "Arial Rounded MT Bold", Monaco, monospace;
@@ -55,7 +56,7 @@ header span{
 	color: black;
 }
 #seccionDos p{
-	display: inline-block;
+	display: block;
 	font-family: "Arial Rounded MT Bold", Monaco, monospace;
 	font-size: 1.2em;
 	margin-top: 1%;
@@ -66,9 +67,9 @@ header span{
 #seccionTres{		
 	position: absolute;
 	height: 80%;
-	width: 58%;
-	top: 20%;
-	left: 22%;		
+	width: 70%;
+	top: 18%;
+	left: 10%;	
 }
 #area{
 	width: 70%;
@@ -86,14 +87,16 @@ header span{
 	display:table;
 }
 #mult{
-	/*background-image: url(../img/mult.png);*/
+	background-image: url(../img/mult.png);
+	background-position: 100px left;
+	background-repeat: no-repeat;
 	border-bottom: 2px solid rgb(225,225,225);
-	/*background-size: 100% 100%;*/
 }
-/*#division{
+#division{
 	background-image: url(../img/div.png);
-	background-size: 100% 100%;
-}*/
+	background-position: top left;
+	background-repeat: no-repeat;
+}
 	
 #seccionTres button{
 	padding: 5px 10px;
@@ -166,10 +169,9 @@ footer{
 
 .unit{
 	display: inline-block;
-	height: 75px;
-	width: 75px;
-	background-color: white;
-	color: black;
+	height: 73px;
+	width: 73px;
+	color: white;
 	text-align: center;
 	cursor: pointer;
 	margin-right: 10px;
@@ -177,22 +179,23 @@ footer{
 	margin-top: 15px;
 	z-index: 100;
 	border-radius: 40px;
-	border: 1px solid rgb(80,80,80);
+	background-color: rgb(72,72,72);
+	border: 2px solid rgba(255,255,255,1);
 }
 .unit label{
 	display: inline-block;
 	text-shadow: #000 0 1px;
 	height: 55px;
-	font-size: 2.4em;
+	font-size: 2.2em;
 	cursor: pointer;
-	margin-top: 5px;
+	margin-top: 10px;
 }
 .unit footer{
 	position: relative;
 	font-size: 0.7em;
 	padding: 1px;
 	height: 20px;
-	margin-top: -5px;
+	margin-top: -12px;
 }
 .unit.over{border: 2px dashed #000}
 
@@ -239,19 +242,20 @@ footer{
 		margin-top: 20px;
 		margin-bottom: 20px;
 		margin-left: 5%;
+		font-size: 1em;
 	}
 	#area{
 		position: initial;
-		width: 70%;
+		width: 90%;
 		height: 300px;
+		margin-left: 5%;
 	}
 	#seccionTres button{
 		position: initial;
 		display: inline-block;
-		float: right;
-		top: 82%;
+		float: right;	
 	}			
-	#seccionTres #btnVaciar{margin-right: 18%;}
+	#seccionTres #btnVaciar{margin-right: 5%;}
 	footer{
 		position: initial;
 		display: block;
