@@ -1,7 +1,10 @@
 
+html, body{
+	width: 100%;
+	height: 100%;
+}
 body{
-	background-image: url('../img/background.png');
-	background-size: 100% 100%;
+	background-color: rgb(217, 222, 224);
 	font-family: Century Gothic, sans-serif;
 }
 
@@ -27,6 +30,7 @@ header h5{
 	padding-top: 10px;
 	padding-bottom: 10px;
 	font-size: 1.2em;
+	color: gray;
 }
 header span{	
 	width: auto;
@@ -35,13 +39,35 @@ header span{
 	font-size: 1.3em;
 }
 
-#seccionDos{		
-	position: absolute;
-	height: auto;
-	width: 15%;
-	top: 30%;
-	left: 8%;
+.seccionDos{
+	position: fixed;
+	height: 100%;
+	width: 220px;
 	text-align: left;
+	background-color: gray;
+	z-index: 10;
+	top: 0;
+	left: -220px;
+	-webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+	border-right: 0px solid transparent;
+}
+.seccionDos:hover{
+	-webkit-transform: translateX(220px);
+    -moz-transform: translateX(220px);
+    -o-transform: translateX(220px);
+    -ms-transform: translateX(220px);
+    transform: translateX(220px);
+	cursor: pointer;
+}
+#seccionDos{		
+	display: inline-block;
+	width: 180px;
+	padding-left: 20px;
+	padding-top: 20px;
+	font-size: 1.3em;
 }
 #seccionDos h4{
 	font-family: "Arial Rounded MT Bold", Monaco, monospace;
@@ -50,23 +76,32 @@ header span{
 	color: black;
 }
 #seccionDos p{
-	display: inline-block;
+	display: block;
 	font-family: "Arial Rounded MT Bold", Monaco, monospace;
 	font-size: 1.2em;
 	margin-top: 1%;
 	margin-left: 10px;
-	color: gray;			
+	color: white;
+}
+#hint{
+	display: inline-block;
+	position: absolute;
+	margin-left: 20px;
+	margin-top: 150%;
+	font-size: 2em;
+	border-top: 40px solid transparent;
+	border-bottom: 40px solid transparent;
+	border-left: 40px solid gray;
 }
 
 #seccionTres{		
 	position: absolute;
-	height: 80%;
-	width: 58%;
-	top: 20%;
-	left: 22%;		
+	height: 85%;
+	width: 85%;
+	top: 15%;
+	left: 0;	
 }
 #area{
-	border: 2px solid #666666;
 	width: 70%;
 	height: 70%;
 	margin-left: 12%;
@@ -76,35 +111,47 @@ header span{
 #mult, #division{
 	height: 50%;
 	width: 100%;		
-	background-color: white;
 	text-align: center;
 	display:table;
 }
 #mult{
-	background-image: url(../img/mult.png);
-	border-bottom: 2px solid rgb(80,80,80);
-	background-size: 100% 100%;
+	background-color: rgb(218,158,103);
+	border-left: 10px solid rgb(155,151,147);
+	border-top: 10px solid rgb(155,151,147);
+	border-right: 10px solid rgb(155,151,147);
+	border-bottom: 1px solid rgb(155,151,147);;
 }
 #division{
-	background-image: url(../img/div.png);
-	background-size: 100% 100%;
+	background-color: rgb(218,158,103);
+	border-left: 10px solid rgb(155,151,147);
+	border-top: 1px solid rgb(155,151,147);
+	border-right: 10px solid rgb(155,151,147);
+	border-bottom: 10px solid rgb(155,151,147);
 }
 	
 #seccionTres button{
 	padding: 5px 10px;
 	float: right;
 	position: relative;
-	top: 82%;
-}			
-#seccionTres #btnVaciar{margin-right: 18%;}
-#seccionTres button:hover{background-color:gray;}
+	top: 83%;
+	margin-right: 16.3%;
+	cursor: pointer;
+	background-color: rgb(155,151,147);
+	border: none;
+}				
+#seccionTres button:hover{background-color: rgb(222,222,222)}
 
 aside{		
-	position: absolute;
+	position: initial;
 	height: 100%;
 	width: 20%;
-	right: 0;
+	margin-left: 80%;
 	background-color: RGB(74,110,169);
+	/*background-color: #fff; 
+	background-image: 
+	linear-gradient(90deg, transparent 79px, #abced4 79px, #abced4 81px, transparent 81px),
+	linear-gradient(#eee .1em, transparent .1em);
+	background-size: 100% 1.2em;*/
 	text-align: center;
 	overflow-x: auto;
 }
@@ -125,18 +172,23 @@ footer{
 	margin-left: 5px;
 }
 #facebook{margin-left: 10px}
-#facebook img, #github img, #twitter img{width: auto; height: auto;}
+#facebook img, #github img, #twitter img{
+	width: auto; height: auto;
+}
 #facebook{
 	background-image: url(../img/facebook.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }
 #twitter{
 	background-image: url(../img/twitter.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }	
 #github{
 	background-image: url(../img/github.png);
 	background-size: 100% 100%;
+	border-radius: 25px;
 }
 	
 [draggable]{
@@ -148,45 +200,35 @@ footer{
 
 .unit{
 	display: inline-block;
-	height: 75px;
-	width: 75px;
-	border: 1px solid #666666;
-	background-color: white;
-	color: black;
-	-webkit-box-shadow: inset 0 0 3px #000;		
-	box-shadow: inset 0 0 3px #000;
-	text-align: center;		
+	height: 73px;
+	width: 73px;
+	color: white;
+	text-align: center;
 	cursor: pointer;
 	margin-right: 10px;
 	margin-left: 10px;
 	margin-top: 15px;
+	z-index: 100;
+	border-radius: 40px;
+	background-color: rgb(72,72,72);
+	border: 2px solid rgba(255,255,255,1);
 }
 .unit label{
 	display: inline-block;
 	text-shadow: #000 0 1px;
-	height: 58px;
-	font-size: 2.6em;
+	height: 55px;
+	font-size: 2.2em;
 	cursor: pointer;
+	margin-top: 10px;
 }
 .unit footer{
 	position: relative;
-	font-size: 0.8em;
-	line-height: 20px;
-	color: #fff;
-	text-shadow: #000 0 1px;
-	box-shadow: 5px;
+	font-size: 0.7em;
 	padding: 1px;
 	height: 20px;
-	background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-	background: -webkit-gradient(linear, left bottom, right bottom,
-								color-stop(0, rgb(0,0,0)),
-								color-stop(0.50, rgb(79,79,79)),
-								color-stop(1, rgb(21,21,21)));
-	background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
-	background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));				
+	margin-top: -12px;
 }
 .unit.over{border: 2px dashed #000}
-.onarea{margin-top: 50px}
 
 @media only screen and (max-width : 540px){
 	body{
@@ -199,15 +241,20 @@ footer{
 		display: block;
 		height: auto;
 	}
+	header span{
+		float: right;
+		padding: 10px;
+	}
 	aside{
 		position: initial;
 		display: inline-block;
+		margin-left: 0;
 		width: 100%;
-		height: 77px;
+		height: auto;
         overflow-x: auto;
 		overflow-y: hidden;
         vertical-align: middle;
-		margin-top: 20px;
+		margin-top: 10px;
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
@@ -226,16 +273,25 @@ footer{
 		margin-top: 20px;
 		margin-bottom: 20px;
 		margin-left: 5%;
+		font-size: 1em;
 	}
 	#area{
 		position: initial;
-		width: 70%;
+		width: 90%;
 		height: 300px;
+		margin-left: 5%;
 	}
+	#seccionTres button{
+		position: initial;
+		display: inline-block;
+		float: right;	
+	}			
+	#seccionTres #btnVaciar{margin-right: 5%;}
 	footer{
 		position: initial;
 		display: block;
 		text-align: center;
-		margin-bottom: 20px;
+		padding-top: 10px;
+		padding-bottom: 30px;
 	}
 }
