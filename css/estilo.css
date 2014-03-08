@@ -82,7 +82,9 @@ header span{
 	margin-top: 1%;
 	margin-left: 10px;
 	color: white;
+	margin: 18px;
 }
+#seccionDos h4{margin-bottom:30px}
 #hint{
 	display: inline-block;
 	position: absolute;
@@ -139,7 +141,7 @@ header span{
 	background-color: rgb(155,151,147);
 	border: none;
 }				
-#seccionTres button:hover{background-color: rgb(222,222,222)}
+#seccionTres button:hover{background-color: gray}
 
 aside{		
 	position: initial;
@@ -279,19 +281,20 @@ footer{
 		position: initial;
 		width: 90%;
 		height: 300px;
-		margin-left: 5%;
+		margin-left: 3%;
 	}
 	#seccionTres button{
 		position: initial;
 		display: inline-block;
-		float: right;	
+		float: right;
+		margin-right: 3%;
+		margin-top: 10px;
 	}			
-	#seccionTres #btnVaciar{margin-right: 5%;}
 	footer{
 		position: initial;
 		display: block;
 		text-align: center;
-		padding-top: 10px;
+		padding-top: 30px;
 		padding-bottom: 30px;
 	}
 }
