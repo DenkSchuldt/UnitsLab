@@ -1,4 +1,4 @@
 UnitsLab
 ========
 
-Web application.
+Create physical units while you have fun!
